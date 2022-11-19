@@ -4,5 +4,5 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 ## Instructions
 
-### [EKS Installation with Calico OSS](/steps/1-eks-cluster-creation.md)
+   [1 - EKS Installation with Calico OSS](/steps/1-eks-cluster-creation.md)
 

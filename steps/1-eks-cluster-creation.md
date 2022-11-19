@@ -5,7 +5,7 @@
    ```bash 
    export INSTANCETYPE=t3.large
    export CLUSTERNAME=regis-eks-cluster
-   export REGION=ca-central-1
+   export REGION=sa-east-1
    export K8SVERSION=1.23
    export KEYPAIRNAME=regis-egw-key
    ```
@@ -16,7 +16,9 @@
    eksctl create cluster \
      --name $CLUSTERNAME \
      --region $REGION \
+     --zones sa-east-1a,sa-east-1b \
      --version $K8SVERSION \
+     --vpc-private-subnets=subnet-0afaae3b4b48c21f0,subnet-0abfc193094cc34d4 \
      --without-nodegroup
    ```
 

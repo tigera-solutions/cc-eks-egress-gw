@@ -16,9 +16,8 @@
    eksctl create cluster \
      --name $CLUSTERNAME \
      --region $REGION \
-     --zones sa-east-1a,sa-east-1b \
      --version $K8SVERSION \
-     --vpc-private-subnets=subnet-0afaae3b4b48c21f0,subnet-0abfc193094cc34d4 \
+     --vpc-public-subnets=subnet-0afaae3b4b48c21f0,subnet-0abfc193094cc34d4 \
      --without-nodegroup
    ```
 

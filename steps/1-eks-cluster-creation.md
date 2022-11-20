@@ -7,7 +7,7 @@
    export CLUSTERNAME=regis-eks-cluster
    export REGION=sa-east-1
    export K8SVERSION=1.23
-   export KEYPAIRNAME=regis-egw-key
+   export KEYPAIRNAME=regis-aws
    ```
 
 2. First, create an Amazon EKS cluster without any nodes.
@@ -69,7 +69,9 @@
     ```bash
     # install driver
     kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"
+    ```
 
+    ```bash
     # check driver pods status
     kubectl get pods -n kube-system | grep -i ebs-csi
     ```

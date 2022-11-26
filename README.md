@@ -335,7 +335,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     kubectl get ippools -o wide
     ```
 
-14. Copy the pull secret from calico-system ns to the default ns for allow the download of the egw image
+14. Copy the pull secret from calico-system ns to the default ns to authorize the download of the egw image
 
     ```bash
     kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \

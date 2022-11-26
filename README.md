@@ -176,7 +176,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 6. Create the installation configurarion.
 
-   ```bash
+   ```yaml
    kubectl create -f - <<EOF
    kind: Installation
    apiVersion: operator.tigera.io/v1
@@ -204,47 +204,53 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 7. Create the nodegroup and the nodes
 
-eksctl create nodegroup $CLUSTERNAME-ng \
-  --cluster $CLUSTERNAME \
-  --region $REGION \
-  --node-type $INSTANCETYPE \
-  --nodes 2 \
-  --nodes-min 0 \
-  --nodes-max 2 \
-  --max-pods-per-node 100 \
-  --ssh-access \
-  --ssh-public-key $KEYPAIRNAME
+   ```bash
+   eksctl create nodegroup $CLUSTERNAME-ng \
+     --cluster $CLUSTERNAME \
+     --region $REGION \
+     --node-type $INSTANCETYPE \
+     --nodes 2 \
+     --nodes-min 0 \
+     --nodes-max 2 \
+     --max-pods-per-node 100 \
+     --ssh-access \
+     --ssh-public-key $KEYPAIRNAME
+   ```
 
 8. Install the EBS driver for the EKS cluster
 
-# install driver
+   ```bash
+   # install driver
+   kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"
+   ```
 
-kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"
-
-# check driver pods status
-
-kubectl get pods -n kube-system | grep -i ebs-csi
+   ```bash
+   # check driver pods status
+   kubectl get pods -n kube-system | grep -i ebs-csi
+   ```
 
 9. Connect to Calico Cloud.
 
 10. Create the IP reservations for the AWS reserved ips
 
-kubectl create -f - <<EOF
-apiVersion: projectcalico.org/v3
-kind: IPReservation
-metadata:
-  name: aws-ip-reservations
-spec:
-  reservedCIDRs:
-  - 192.168.2.0/30
-  - 192.168.2.127
-  - 192.168.2.128/30
-  - 192.168.2.255
-  - 192.168.3.0/30
-  - 192.168.3.127
-  - 192.168.3.128/30
-  - 192.168.3.255
-EOF
+    ```yaml
+    kubectl create -f - <<EOF
+    apiVersion: projectcalico.org/v3
+    kind: IPReservation
+    metadata:
+      name: aws-ip-reservations
+    spec:
+      reservedCIDRs:
+      - 192.168.2.0/30
+      - 192.168.2.127
+      - 192.168.2.128/30
+      - 192.168.2.255
+      - 192.168.3.0/30
+      - 192.168.3.127
+      - 192.168.3.128/30
+      - 192.168.3.255
+    EOF
+    ```
 
 11. Enable the support for the egress gateway per pod and per namespace. 
 

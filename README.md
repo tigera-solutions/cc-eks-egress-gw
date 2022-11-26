@@ -514,7 +514,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       - image: nicolaka/netshoot:latest
         env:
          - name: HOSTPVTIPADDR
-      value: '$HOSTPVTIPADDR'
+           value: '$HOSTPVTIPADDR'
       name: netshoot
         command: ["/bin/bash"]
         args: ["-c", "while true; do ping localhost; sleep 60; done"]

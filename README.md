@@ -115,7 +115,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --vpc-id $VPCID \
      --cidr 192.168.2.0/25 \
      --availability-zone $AZ1 \
-     --query 'Subnet.SubnetId'
+     --query 'Subnet.SubnetId' \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
        | SUBNETIDCALICO1A=$(awk '{print $2}')

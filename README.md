@@ -337,402 +337,450 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 14. Copy the pull secret from calico-system ns to the default ns for allow the download of the egw image
 
-kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \
-   grep -v '^[[:space:]]*namespace:[[:space:]]*calico-system' | \
-   kubectl apply --namespace=default -f -
+    ```bash
+    kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \
+       grep -v '^[[:space:]]*namespace:[[:space:]]*calico-system' | \
+       kubectl apply --namespace=default -f -
+    ```
 
 15. Install the egress gw red in the default ns.
 
-kubectl apply -f - <<EOF
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: egress-gateway-red
-  namespace: default
-  labels:
-    egress-code: red
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      egress-code: red
-  template:
+    ```yaml
+    kubectl apply -f - <<EOF
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      annotations:
-        cni.projectcalico.org/ipv4pools: '["egress-red-1a","egress-red-1b"]'
+      name: egress-gateway-red
+      namespace: default
       labels:
         egress-code: red
     spec:
-      topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector: 
-          matchLabels:
+      replicas: 2
+      selector:
+        matchLabels:
+          egress-code: red
+      template:
+        metadata:
+          annotations:
+            cni.projectcalico.org/ipv4pools: '["egress-red-1a","egress-red-1b"]'
+          labels:
             egress-code: red
-      imagePullSecrets:
-      - name: tigera-pull-secret
-      nodeSelector:
-        kubernetes.io/os: linux
-      containers:
-      - name: egress-gateway
-        image: quay.io/tigera/egress-gateway:v3.14.1
-        env:
-        - name: EGRESS_POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /var/run
-          name: policysync
-        resources:
-          requests:
-            projectcalico.org/aws-secondary-ipv4: 1
-          limits:
-            projectcalico.org/aws-secondary-ipv4: 1
-      terminationGracePeriodSeconds: 0
-      volumes:
-      - flexVolume:
-          driver: nodeagent/uds
-        name: policysync
-EOF
+        spec:
+          topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: topology.kubernetes.io/zone
+            whenUnsatisfiable: DoNotSchedule
+            labelSelector: 
+              matchLabels:
+                egress-code: red
+          imagePullSecrets:
+          - name: tigera-pull-secret
+          nodeSelector:
+            kubernetes.io/os: linux
+          containers:
+          - name: egress-gateway
+            image: quay.io/tigera/egress-gateway:v3.14.1
+            env:
+            - name: EGRESS_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            securityContext:
+              privileged: true
+            volumeMounts:
+            - mountPath: /var/run
+              name: policysync
+            resources:
+              requests:
+                projectcalico.org/aws-secondary-ipv4: 1
+              limits:
+                projectcalico.org/aws-secondary-ipv4: 1
+          terminationGracePeriodSeconds: 0
+          volumes:
+          - flexVolume:
+              driver: nodeagent/uds
+            name: policysync
+    EOF
+    ```
 
 16. Create a test host to see the how the packets details from outside the eks cluster.
 
-# get the subnet id of the host az1 subnet
-SUBNETIDHOST=$(aws ec2 describe-subnets \
-    --filters "Name=cidrBlock,Values=192.168.0.0/25" \
-    --query 'Subnets[0].SubnetId' \
-    --output text)
+    ```bash
+    # get the subnet id of the host az1 subnet
+    SUBNETIDHOST=$(aws ec2 describe-subnets \
+        --filters "Name=cidrBlock,Values=192.168.0.0/25" \
+        --query 'Subnets[0].SubnetId' \
+        --output text)
+    ```
+    
+    ```bash
+    # create a segurity group
+    aws ec2 create-security-group \
+      --group-name rmart-sg-test-host \
+      --description "Security group for the test host" \
+      --vpc-id $VPCID \
+      --output yaml | export HOSTSGID=$(awk '{print $2}') \
+      && echo $HOSTSGID
+    ```
+    
+    ```bash
+    aws ec2 authorize-security-group-ingress \
+      --group-id $HOSTSGID \
+      --protocol tcp \
+      --port 22 \
+      --cidr 0.0.0.0/0
+    ```
+    
+    ```bash
+    aws ec2 authorize-security-group-ingress \
+      --group-id $HOSTSGID \
+      --protocol tcp \
+      --port 7777 \
+      --cidr 0.0.0.0/0
+    ```
 
-#      # Get an sg-id that allows port 22 (previous created by eks) 
-#     SGIDHOST=$(aws ec2 describe-security-groups \
-#        --filters 'Name=ip-permission.from-port,Values=22' \
-#        --query 'SecurityGroups[*].GroupId' \
-#        --output text)
+    ```bash
+    # create the instance
+    aws ec2 run-instances \
+      --key-name $KEYPAIRNAME \
+      --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
+      --subnet-id $SUBNETIDHOST \
+      --security-group-ids $HOSTSGID \
+      --associate-public-ip-address \
+      --instance-type t3.nano \
+      --count 1 \
+      --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
+      --output yaml \
+        | export INSTANCEIDHOST=$(grep InstanceId | awk '{print $2}')
+    ```
 
+    ```bash
+    # retrive the host ip address
+    HOSTIPADDRESS=$(aws ec2 describe-instances \
+      --instance-ids $INSTANCEIDHOST \
+      --query "Reservations[*].Instances[*].PublicIpAddress" \
+      --output text) && echo $HOSTIPADDRESS
+    ```
+    
+    ```bash
+    # log in to the text host
+    ssh -i ~/.ssh/$KEYPAIRNAME.pem ec2-user@$HOSTIPADDRESS
+    ```
 
-#actually, create a segurity group
-aws ec2 create-security-group \
-  --group-name rmart-sg-test-host \
-  --description "Security group for the test host" \
-  --vpc-id $VPCID \
-  --output yaml | export HOSTSGID=$(awk '{print $2}') \
-  && echo $HOSTSGID
-
-
-aws ec2 authorize-security-group-ingress \
-  --group-id $HOSTSGID \
-  --protocol tcp \
-  --port 22 \
-  --cidr 0.0.0.0/0
-
-
-aws ec2 authorize-security-group-ingress \
-  --group-id $HOSTSGID \
-  --protocol tcp \
-  --port 7777 \
-  --cidr 0.0.0.0/0
-
-
-# create the instance
-aws ec2 run-instances \
-  --key-name $KEYPAIRNAME \
-  --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
-  --subnet-id $SUBNETIDHOST \
-  --security-group-ids $HOSTSGID \
-  --associate-public-ip-address \
-  --instance-type t3.nano \
-  --count 1 \
-  --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
-  --output yaml \
-    | export INSTANCEIDHOST=$(grep InstanceId | awk '{print $2}')
-
-
-# retrive the host ip address
-HOSTIPADDRESS=$(aws ec2 describe-instances \
-  --instance-ids $INSTANCEIDHOST \
-  --query "Reservations[*].Instances[*].PublicIpAddress" \
-  --output text) && echo $HOSTIPADDRESS
-
-
-# log in to the text host
-ssh -i ~/.ssh/$KEYPAIRNAME.pem ec2-user@$HOSTIPADDRESS
-
-# run
-sudo tcpdump -v -ni eth0 tcp port 7777 
-
+    ```bash
+    # run
+    sudo tcpdump -v -ni eth0 tcp port 7777 
+    ```
 
 17. Create a pod for testing
 
-- Open another terminal
+    - Open another terminal
+    
+    ```yaml
+    # create the pod
+    
+    kubectl create -f - <<EOF
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: netshoot-default
+      labels:
+        app: netshoot
+    spec:
+      containers:
+      - image: nicolaka/netshoot:latest
+        name: netshoot
+        command: ["/bin/bash"]
+        args: ["-c", "while true; do ping localhost; sleep 60; done"]
+    EOF
+    ```
+    
+    a. Test w/o egress-gw
+    
+       ```bash
+       # get the pvt ip from the test host:
+       
+       aws ec2 describe-instances \
+         --instance-ids $INSTANCEIDHOST \
+         --query "Reservations[*].Instances[*].PrivateIpAddress" \
+         --output table \
+         --no-cli-pager
+       ```
 
-# create the pod
+       example output:
+       
+       <pre>
+       -------------------
+       |DescribeInstances|
+       +-----------------+
+       |  192.168.0.113  |
+       +-----------------+
+       </pre>
 
-kubectl create -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: netshoot-default
-  labels:
-    app: netshoot
-spec:
-  containers:
-  - image: nicolaka/netshoot:latest
-    name: netshoot
-    command: ["/bin/bash"]
-    args: ["-c", "while true; do ping localhost; sleep 60; done"]
-EOF
+       ```bash      
+       # connect to the pod
+       kubectl exec -it netshoot-default -- /bin/bash
+       ```
 
-17a. Test w/o egress-gw
+       ```bash
+       # nc to the test host ip
+       nc -zv 192.168.0.113 7777
+       ```
 
-# get the pvt ip from the test host:
+       The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
+       
+    
+    b. Test w/ egress-gw
+    
+       - Open a third terminal
+       
+       ```bash
+       # annotate the pod
+       kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'red'"
+       ```
 
-aws ec2 describe-instances \
-  --instance-ids $INSTANCEIDHOST \
-  --query "Reservations[*].Instances[*].PrivateIpAddress" \
-  --output table \
-  --no-cli-pager
-
-example output:
-
--------------------
-|DescribeInstances|
-+-----------------+
-|  192.168.0.113  |
-+-----------------+
-
-# connect to the pod
-kubectl exec -it netshoot-default -- /bin/bash
-
-# nc to the test host ip
-nc -zv 192.168.0.113 7777
-
-The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
-
-
-17b. Test w/ egress-gw
-
-- Open a third terminal
-
-# annotate the pod
-kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'red'"
-
-Go back to the pod bash prompt and repeat the nc command.
-
-nc -zv 192.168.0.113 7777
-
-
-Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
-
-
-# if you want to stop the pod of using the egress-gateway, remove the annotation:  
-kubectl annotate pods net egress.projectcalico.org/selector-
-
+       Go back to the pod bash prompt and repeat the nc command.
+       
+       ```bash
+       nc -zv 192.168.0.113 7777
+       ```
+       
+       Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
+              
+       ```bash
+       # if you want to stop the pod of using the egress-gateway, remove the annotation:  
+       kubectl annotate pods net egress.projectcalico.org/selector-
+       ```
 
 18. Create another egress gateway
 
-18a. Create an IP pool for the blue egress gw
+    a. Create an IP pool for the blue egress gw
+    
+       ```yaml
+       kubectl apply -f - <<EOF
+       apiVersion: projectcalico.org/v3
+       kind: IPPool
+       metadata:
+         name: egress-blue-1a
+       spec:
+         cidr: 192.168.3.66/31
+         allowedUses: ["Workload"]
+         awsSubnetID: $SUBNETIDEGW1A
+         blockSize: 32
+         nodeSelector: "!all()"
+         disableBGPExport: true
+       ---
+       apiVersion: projectcalico.org/v3
+       kind: IPPool
+       metadata:
+         name: egress-blue-1b
+       spec:
+         cidr: 192.168.3.194/31
+         allowedUses: ["Workload"]
+         awsSubnetID: $SUBNETIDEGW1B
+         blockSize: 32
+         nodeSelector: "!all()"
+         disableBGPExport: true
+       EOF
+       ```
+       
+       ```bash
+       kubectl get ippools
+       ```
 
-kubectl apply -f - <<EOF
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: egress-blue-1a
-spec:
-  cidr: 192.168.3.66/31
-  allowedUses: ["Workload"]
-  awsSubnetID: $SUBNETIDEGW1A
-  blockSize: 32
-  nodeSelector: "!all()"
-  disableBGPExport: true
----
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: egress-blue-1b
-spec:
-  cidr: 192.168.3.194/31
-  allowedUses: ["Workload"]
-  awsSubnetID: $SUBNETIDEGW1B
-  blockSize: 32
-  nodeSelector: "!all()"
-  disableBGPExport: true
-EOF
+    
+    b. Create the blue egw
 
-kubectl get ippools
-
-18b. Create the blue egw
-
-kubectl apply -f - <<EOF
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: egress-gateway-blue
-  namespace: default
-  labels:
-    egress-code: blue
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      egress-code: blue
-  template:
-    metadata:
-      annotations:
-        cni.projectcalico.org/ipv4pools: '["egress-blue-1a","egress-blue-1b"]'
-      labels:
-        egress-code: blue
-    spec:
-      topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector: 
-          matchLabels:
-            egress-code: blue
-      imagePullSecrets:
-      - name: tigera-pull-secret
-      nodeSelector:
-        kubernetes.io/os: linux
-      containers:
-      - name: egress-gateway
-        image: quay.io/tigera/egress-gateway:v3.14.1
-        env:
-        - name: EGRESS_POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /var/run
-          name: policysync
-        resources:
-          requests:
-            projectcalico.org/aws-secondary-ipv4: 1
-          limits:
-            projectcalico.org/aws-secondary-ipv4: 1
-      terminationGracePeriodSeconds: 0
-      volumes:
-      - flexVolume:
-          driver: nodeagent/uds
-        name: policysync
-EOF
-
-kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+       ```bash
+       kubectl apply -f - <<EOF
+       apiVersion: apps/v1
+       kind: Deployment
+       metadata:
+         name: egress-gateway-blue
+         namespace: default
+         labels:
+           egress-code: blue
+       spec:
+         replicas: 2
+         selector:
+           matchLabels:
+             egress-code: blue
+         template:
+           metadata:
+             annotations:
+               cni.projectcalico.org/ipv4pools: '["egress-blue-1a","egress-blue-1b"]'
+             labels:
+               egress-code: blue
+           spec:
+             topologySpreadConstraints:
+             - maxSkew: 1
+               topologyKey: topology.kubernetes.io/zone
+               whenUnsatisfiable: DoNotSchedule
+               labelSelector: 
+                 matchLabels:
+                   egress-code: blue
+             imagePullSecrets:
+             - name: tigera-pull-secret
+             nodeSelector:
+               kubernetes.io/os: linux
+             containers:
+             - name: egress-gateway
+               image: quay.io/tigera/egress-gateway:v3.14.1
+               env:
+               - name: EGRESS_POD_IP
+                 valueFrom:
+                   fieldRef:
+                     fieldPath: status.podIP
+               securityContext:
+                 privileged: true
+               volumeMounts:
+               - mountPath: /var/run
+                 name: policysync
+               resources:
+                 requests:
+                   projectcalico.org/aws-secondary-ipv4: 1
+                 limits:
+                   projectcalico.org/aws-secondary-ipv4: 1
+             terminationGracePeriodSeconds: 0
+             volumes:
+             - flexVolume:
+                 driver: nodeagent/uds
+               name: policysync
+       EOF
+       ```
+       
+       ```bash
+       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+       ```
 
 19. Test the new egw selections a ns
 
-#create a ns
-kubectl create ns app-test
+    ```bash
+    #create a ns
+    kubectl create ns app-test
+    ```
 
-19a. Test w/o egress-gw
+    a. Test w/o egress-gw
+    
+       Create a pod and test
+       
+       ```yaml
+       kubectl create -f - <<EOF
+       apiVersion: v1
+       kind: Pod
+       metadata:
+         name: netshoot-app-test
+         namespace: app-test
+         labels:
+           app: netshoot
+       spec:
+         containers:
+         - image: nicolaka/netshoot:latest
+           name: netshoot
+           command: ["/bin/bash"]
+           args: ["-c", "while true; do ping localhost; sleep 60; done"]
+       EOF
+       ```
+       
+       ```bash
+       # connect to the pod
+       kubectl exec -it -n app-test netshoot-app-test -- /bin/bash
+       ```
+       
+       ```bash
+       # nc to the test host ip
+       nc -zv 192.168.0.113 7777
+       ```
 
-#create a pod and test
+       The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
+    
+    b. Annotate the ns
 
-kubectl create -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: netshoot-app-test
-  namespace: app-test
-  labels:
-    app: netshoot
-spec:
-  containers:
-  - image: nicolaka/netshoot:latest
-    name: netshoot
-    command: ["/bin/bash"]
-    args: ["-c", "while true; do ping localhost; sleep 60; done"]
-EOF
+       ```bash 
+       kubectl annotate ns app-test egress.projectcalico.org/selector="egress-code == 'blue'"
+       kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector="projectcalico.org/name == 'default'"
+       ```
+       
+       ```bash
+       #test again
+       nc -zv 192.168.0.113 7777
+       ```
+       
+       ```bash
+       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+       ```
 
-
-# connect to the pod
-kubectl exec -it -n app-test netshoot-app-test -- /bin/bash
-
-# nc to the test host ip
-nc -zv 192.168.0.113 7777
-
-The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
-
-19b. Annotate the ns
-
-kubectl annotate ns app-test egress.projectcalico.org/selector="egress-code == 'blue'"
-kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector="projectcalico.org/name == 'default'"
-
-#test again
-nc -zv 192.168.0.113 7777
-
-kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
-
-Create another pod in the test namespace and test it again
-
-kubectl run -it --rm -n app-test another-pod --image nicolaka/netshoot:latest
-
-
+       Create another pod in the test namespace and test it again
+       
+       ```bash
+       kubectl run -it --rm -n app-test another-pod --image nicolaka/netshoot:latest
+       ````
+   
 ===================
 Cleaning Up the Env
 ===================
 
-1 - remove the test host
+1. remove the test host
 
-aws ec2 terminate-instances \
-  --instance-ids $INSTANCEIDHOST \
-  --no-cli-pager
+   ```bash
+   aws ec2 terminate-instances \
+     --instance-ids $INSTANCEIDHOST \
+     --no-cli-pager
+   ```
 
-2 - remove the test host sg
+2. remove the test host sg
 
-aws ec2 delete-security-group \
-  --group-id $HOSTSGID \
-  --no-cli-pager 
+   ```bash
+   aws ec2 delete-security-group \
+     --group-id $HOSTSGID \
+     --no-cli-pager 
+   ```
 
+3. remove ths nodegroup \
 
-3 - remove ths nodegroup \
+   ```bash
+   eksclt delete np \
+     --name $CLUSTERNAME-ng \
+     --cluster $CLUSTERNAME
+   ```
 
+4. remove the custom subnets
 
-4 - remove the custom subnets
+   ```bash
+   aws ec2 delete-subnet \
+   --subnet-id $SUBNETIDCALICO1A
+   aws ec2 delete-subnet \
+   --subnet-id $SUBNETIDCALICO1B
+   aws ec2 delete-subnet \
+   --subnet-id $SUBNETIDEGW1A
+   aws ec2 delete-subnet \
+   --subnet-id $SUBNETIDEGW1B
+   ```
 
-aws ec2 delete-subnet \
---subnet-id $SUBNETIDCALICO1A
-aws ec2 delete-subnet \
---subnet-id $SUBNETIDCALICO1B
-aws ec2 delete-subnet \
---subnet-id $SUBNETIDEGW1A
-aws ec2 delete-subnet \
---subnet-id $SUBNETIDEGW1B
+5. remove the eks cluster
 
-5 - remove the eks cluster
+   ```bash
+   eksctl delete cluster \
+     --name $CLUSTERNAME \
+     --region $REGION
+   ```
 
-eksctl delete cluster \
-  --name $CLUSTERNAME \
-  --region $REGION
+6. remove the keypair, if you created one:
 
-6 - remove the keypair, if you created one:
-
-aws ec2 delete-key-pair \
-  --key-name $KEYPAIRNAME
-
-rm -f ~/.ssh/$KEYPAIRNAME.pem
-
-
-7 - Remove the lab env params file:
-
-rm ~/egwLabVars.env
-
-
-
-
-4 - remove the vpc with the custom subnets
-
-aws ec2 delete-vpc \
-  --vpc-id $VPCID
-
+   ```bash
+   aws ec2 delete-key-pair \
+     --key-name $KEYPAIRNAME
+   # delete the private key stored locally
+   rm -f ~/.ssh/$KEYPAIRNAME.pem
+   ```
 
 
-
-4 - remove the eks cluster
+7. Remove the lab env params file:
+   
+   ```bash
+   rm ~/egwLabVars.env
+   ```
 
 -----
+
+## Congratulations you finished it!

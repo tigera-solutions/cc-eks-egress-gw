@@ -512,7 +512,10 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     spec:
       containers:
       - image: nicolaka/netshoot:latest
-        name: netshoot
+        env:
+         - name: HOSTPVTIPADDR
+      value: '$HOSTPVTIPADDR'
+      name: netshoot
         command: ["/bin/bash"]
         args: ["-c", "while true; do ping localhost; sleep 60; done"]
     EOF

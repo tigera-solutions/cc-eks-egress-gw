@@ -4,9 +4,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 ## Instructions
 
-   [1 - EKS Installation with Calico OSS](/steps/1-eks-cluster-creation.md)
-
-NOTE: In the following sections we'll be generating and setting some environment variables. If you're terminal session restarts you may need to reset these variables. You can use that via the following command:
+> NOTE: In the following sections we'll be generating and setting some environment variables. If you're terminal session restarts you may need to reset these variables. You can use that via the following command:
 
 source ~/egwLabVars.env
 

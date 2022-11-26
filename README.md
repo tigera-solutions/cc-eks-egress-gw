@@ -278,7 +278,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     kubectl describe node `kubectl get nodes -o=jsonpath='{.items[0].metadata.name}'` | grep aws-secondary
     ```
 
-13. Create the IPpools to be used by the second eni on the host and by the egress gateway.
+13. Create the IPpools to be used by the second eni on the nodes and by the egress gateway.
 
     ```yaml
     kubectl create -f - <<EOF

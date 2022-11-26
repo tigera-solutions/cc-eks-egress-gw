@@ -231,6 +231,8 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 9. Connect to Calico Cloud.
 
+   Connect your EKS cluster to [Calico Cloud](https://www.calicocloud.io/)
+
 10. Create the IP reservations for the AWS reserved ips
 
     ```yaml

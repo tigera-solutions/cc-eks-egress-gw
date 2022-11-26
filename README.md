@@ -174,7 +174,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
    ```
 
-6. Create the installation configurarion.
+6. Create the installation configuration.
 
    ```yaml
    kubectl create -f - <<EOF
@@ -343,7 +343,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        kubectl apply --namespace=default -f -
     ```
 
-15. Install the egress gw red in the default ns.
+15. Install the egress gw red in the default namespace.
 
     ```yaml
     kubectl apply -f - <<EOF
@@ -403,7 +403,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     EOF
     ```
 
-16. Create a test host to see the how the packets details from outside the eks cluster.
+16. Create a test host to see the packets details from outside the eks cluster.
 
     ```bash
     # get the subnet id of the host az1 subnet
@@ -609,7 +609,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        ```bash
        kubectl get ippools
        ```
-
     
     b. Create the blue egw
 
@@ -675,14 +674,14 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
        ```
 
-19. Test the new egw selections a ns
+19. Test the new egw selecting a namespace instead of a pod this time.
 
     ```bash
     #create a ns
     kubectl create ns app-test
     ```
 
-    a. Test w/o egress-gw
+    a. Test without using the egress-gw
     
        Create a pod and test
        
@@ -719,7 +718,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
        The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
     
-    b. Annotate the ns
+    b. Annotate the namespace to startu using the egress gateway.
 
        ```bash 
        kubectl annotate ns app-test egress.projectcalico.org/selector="egress-code == 'blue'"
@@ -746,9 +745,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        nc -zv $HOSTPVTIPADDR 7777
        ```
 
-## Cleaning Up the Env
+## Cleaning up the environment
 
-1. remove the test host
+1. Remove the test host
 
    ```bash
    aws ec2 terminate-instances \
@@ -756,7 +755,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --no-cli-pager
    ```
 
-2. remove the test host sg
+2. Remove the test host sg
 
    ```bash
    aws ec2 delete-security-group \
@@ -765,7 +764,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    ```
    Note: If the command fails, wait a few minutes and try again.
 
-3. remove ths nodegroup \
+3. Remove the nodegroup \
 
    ```bash
    eksctl delete nodegroup \
@@ -773,7 +772,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --cluster $CLUSTERNAME
    ```
 
-4. remove the custom subnets
+4. Remove the custom subnets
 
    ```bash
    aws ec2 delete-subnet \
@@ -786,7 +785,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    --subnet-id $SUBNETIDEGW1B
    ```
 
-5. remove the eks cluster
+5. Remove the eks cluster
 
    ```bash
    eksctl delete cluster \
@@ -794,7 +793,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --region $REGION
    ```
 
-6. remove the keypair, if you created one:
+6. Remove the keypair, if you created one:
 
    ```bash
    aws ec2 delete-key-pair \
@@ -802,7 +801,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    # delete the private key stored locally
    rm -f ~/.ssh/$KEYPAIRNAME.pem
    ```
-
 
 7. Remove the lab env params file:
    

@@ -5,7 +5,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 ## Instructions
 
 > NOTE: In the following sections we'll be generating and setting some environment variables. If you're terminal session restarts you may need to reset these variables. You can use that via the following command: <p>
-
 `source ~/egwLabVars.env`
 
 echo "# Start Egress Gateway Lab Params" > ~/egwLabVars.env

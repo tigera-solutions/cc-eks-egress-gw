@@ -67,7 +67,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    echo export AZ2=$AZ2 >> ~/egwLabVars.env
    ```
    
-   Create the cluster to use only 2 availability zones.
+   Create the cluster to using only the 2 availability zones.
    
    ```bash
    eksctl create cluster \
@@ -82,85 +82,99 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 4. Cloudformation will create a VPC with 2 networks that will be used to allocate IPs for the nodes and pods.
 
-As we will use Calico cni, let's create subnets for the default ippool. Also, lets create subnets to be used for the egress gateway.
+   As we will use Calico CNI, let's create subnets for the default ippool. Also, lets create subnets to be used for the egress gateway.
+   
+   The final ip subnet distribution will look like:
+   
+   <pre>
+   192.168.0.0/25        eks-pub-1a \
+   192.168.0.128/25      eks-pub-1b | Created by eksctl
+   192.168.1.0/25        eks-pvt-1a | using cloud formation
+   192.168.1.128/25      eks-pvt-1b /
+   192.168.2.0/25        calico-pvt-1a \ Subnet for Calico CNI ippool
+   192.168.2.128/25      calico-pvt-1b /
+   192.168.3.0/25        egw-pvt-1a \ Subnets for the egress gw 
+   192.168.3.128/25      egw-pvt-1b / (secondary ifs and e-gws)
+   </pre>
+   
+   ```bash
+   aws ec2 create-subnet \
+     --vpc-id $VPCID \
+     --cidr 192.168.2.0/25 \
+     --availability-zone $AZ1 \
+     --output text \
+     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
+       | export SUBNETIDCALICO1A=$(awk '{print $14}')
+   ```
+   ```bash
+   aws ec2 create-subnet \
+     --vpc-id $VPCID \
+     --cidr 192.168.2.128/25 \
+     --availability-zone $AZ2 \
+     --output text \
+     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1B\}\] \
+       | export SUBNETIDCALICO1B=$(awk '{print $14}')
+   ```
+   ```bash
+   aws ec2 create-subnet \
+     --vpc-id $VPCID \
+     --cidr 192.168.3.0/25 \
+     --availability-zone $AZ1 \
+     --output text \
+     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1A\}\] \
+       | export SUBNETIDEGW1A=$(awk '{print $14}')
+   ```
+   ```bash
+   aws ec2 create-subnet \
+     --vpc-id $VPCID \
+     --cidr 192.168.3.128/25 \
+     --availability-zone $AZ2 \
+     --output text \
+     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1B\}\] \
+       | export SUBNETIDEGW1B=$(awk '{print $14}')
+   ```
 
-The final ip subnet distribution will look like:
+5. Uninstall the AWS VPC CNI and install Calico CNI
+   
+   Uninstall AWS VPN CNI
 
-192.168.0.0/25        eks-pub-1a \
-192.168.0.128/25      eks-pub-1b | Created by eksctl
-192.168.1.0/25        eks-pvt-1a | using cloud formation
-192.168.1.128/25      eks-pvt-1b /
-192.168.2.0/25        calico-pvt-1a \ Subnet for Calico CNI ippool
-192.168.2.128/25      calico-pvt-1b /
-192.168.3.0/25        egw-pvt-1a \ Subnets for the egress gw 
-192.168.3.128/25      egw-pvt-1b / (secondary ifs and e-gws)
+   ```bash
+   kubectl delete daemonset -n kube-system aws-node
+   ```
 
-
-aws ec2 create-subnet \
-  --vpc-id $VPCID \
-  --cidr 192.168.2.0/25 \
-  --availability-zone $AZ1 \
-  --output text \
-  --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
-    | export SUBNETIDCALICO1A=$(awk '{print $14}')
-
-aws ec2 create-subnet \
-  --vpc-id $VPCID \
-  --cidr 192.168.2.128/25 \
-  --availability-zone $AZ2 \
-  --output text \
-  --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1B\}\] \
-    | export SUBNETIDCALICO1B=$(awk '{print $14}')
-
-aws ec2 create-subnet \
-  --vpc-id $VPCID \
-  --cidr 192.168.3.0/25 \
-  --availability-zone $AZ1 \
-  --output text \
-  --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1A\}\] \
-    | export SUBNETIDEGW1A=$(awk '{print $14}')
-
-aws ec2 create-subnet \
-  --vpc-id $VPCID \
-  --cidr 192.168.3.128/25 \
-  --availability-zone $AZ2 \
-  --output text \
-  --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1B\}\] \
-    | export SUBNETIDEGW1B=$(awk '{print $14}')
-
-5. Uninstall the aws vpc cni
-
-kubectl delete daemonset -n kube-system aws-node
-
-6. Install Calico cni
-
-kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+   Install Calico cni
+ 
+   ```bash
+   kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+   ```
 
 6. Create the installation configurarion.
 
-kubectl create -f - <<EOF
-kind: Installation
-apiVersion: operator.tigera.io/v1
-metadata:
-  name: default
-spec:
-  kubernetesProvider: EKS
-  cni:
-    type: Calico
-  calicoNetwork:
-    bgp: Disabled
-    hostPorts: Enabled
-    ipPools:
-    - blockSize: 28
-      cidr: 192.168.2.0/24
-      encapsulation: VXLAN
-      natOutgoing: Enabled
-      nodeSelector: all()
-    linuxDataplane: Iptables
-    multiInterfaceMode: None
-    nodeAddressAutodetectionV4:
-      canReach: 8.8.8.8
-EOF
+   ```bash
+   kubectl create -f - <<EOF
+   kind: Installation
+   apiVersion: operator.tigera.io/v1
+   metadata:
+     name: default
+   spec:
+     kubernetesProvider: EKS
+     cni:
+       type: Calico
+     calicoNetwork:
+       bgp: Disabled
+       hostPorts: Enabled
+       ipPools:
+       - blockSize: 28
+         cidr: 192.168.2.0/24
+         encapsulation: VXLAN
+         natOutgoing: Enabled
+         nodeSelector: all()
+       linuxDataplane: Iptables
+       multiInterfaceMode: None
+       nodeAddressAutodetectionV4:
+         canReach: 8.8.8.8
+   EOF
+   ```
 
 7. Create the nodegroup and the nodes
 

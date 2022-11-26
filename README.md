@@ -416,6 +416,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     ```
     
     Create a segurity group
+
     ```bash
     aws ec2 create-security-group \
       --group-name rmart-sg-test-host \
@@ -428,6 +429,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     ```
     
     Open a port for ssh access
+
     ```bash
     aws ec2 authorize-security-group-ingress \
       --group-id $HOSTSGID \
@@ -438,6 +440,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     ```
     
     Open a port for testing egress gw
+
     ```bash
     aws ec2 authorize-security-group-ingress \
       --group-id $HOSTSGID \
@@ -447,8 +450,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       --no-cli-pager
     ```
 
+   Create a test host to observe the packets outside the cluster.
+
     ```bash
-    # create the instance
     aws ec2 run-instances \
       --key-name $KEYPAIRNAME \
       --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \

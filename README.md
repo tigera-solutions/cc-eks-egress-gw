@@ -35,6 +35,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --key-type rsa 
      --region $REGION \
      --query 'KeyMaterial' \
+     --no-cli-pager \
      --output text > ~/.ssh/$KEYPAIRNAME.pem
    ```
 
@@ -661,7 +662,9 @@ aws ec2 delete-key-pair \
 rm -f ~/.ssh/$KEYPAIRNAME.pem
 
 
+7 - Remove the lab env params file:
 
+rm ~/egwLabVars.env
 
 
 

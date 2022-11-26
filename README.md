@@ -407,10 +407,12 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
     ```bash
     # get the subnet id of the host az1 subnet
-    SUBNETIDHOST=$(aws ec2 describe-subnets \
+    HOSTSUBNETID=$(aws ec2 describe-subnets \
         --filters "Name=cidrBlock,Values=192.168.0.0/25" \
         --query 'Subnets[0].SubnetId' \
-        --output text)
+        --output text) && export HOSTSUBNETID
+    # Persist for Later Sessions in Case of Timeout
+    echo export HOSTSUBNETID=$HOSTSUBNETID >> ~/egwLabVars.env
     ```
     
     ```bash
@@ -444,20 +446,20 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     aws ec2 run-instances \
       --key-name $KEYPAIRNAME \
       --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
-      --subnet-id $SUBNETIDHOST \
+      --subnet-id $HOSTSUBNETID \
       --security-group-ids $HOSTSGID \
       --associate-public-ip-address \
       --instance-type t3.nano \
       --count 1 \
       --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
       --output yaml \
-        | export INSTANCEIDHOST=$(grep InstanceId | awk '{print $2}')
+        | export HOSTINSTANCEID=$(grep InstanceId | awk '{print $2}')
     ```
 
     ```bash
     # retrive the host ip address
     HOSTIPADDRESS=$(aws ec2 describe-instances \
-      --instance-ids $INSTANCEIDHOST \
+      --instance-ids $HOSTINSTANCEID \
       --query "Reservations[*].Instances[*].PublicIpAddress" \
       --output text) && echo $HOSTIPADDRESS
     ```

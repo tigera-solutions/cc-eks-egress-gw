@@ -450,7 +450,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       --no-cli-pager
     ```
 
-   Create a test host to observe the packets outside the cluster.
+    Create a test host to observe the packets outside the cluster.
 
     ```bash
     aws ec2 run-instances \

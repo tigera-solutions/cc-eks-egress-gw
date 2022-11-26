@@ -464,23 +464,30 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
       --output yaml \
         | export HOSTINSTANCEID=$(grep InstanceId | awk '{print $2}')
+    # Persist for Later Sessions in Case of Timeout
+    echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
 
+    Retrive the host ip address, so you can ssh into it.
+
     ```bash
-    # retrive the host ip address
     HOSTIPADDRESS=$(aws ec2 describe-instances \
       --instance-ids $HOSTINSTANCEID \
       --query "Reservations[*].Instances[*].PublicIpAddress" \
       --output text) && echo $HOSTIPADDRESS
+    # Persist for Later Sessions in Case of Timeout
+    echo export HOSTIPADDRESS=$HOSTIPADDRESS >> ~/egwLabVars.env
     ```
-    
+
+    Log in to the test host
+
     ```bash
-    # log in to the text host
     ssh -i ~/.ssh/$KEYPAIRNAME.pem ec2-user@$HOSTIPADDRESS
     ```
 
+    Run tcpdump on the test host so you can observe the packets header.
+    
     ```bash
-    # run
     sudo tcpdump -v -ni eth0 tcp port 7777 
     ```
 

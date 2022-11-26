@@ -27,7 +27,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    echo export KEYPAIRNAME=$KEYPAIRNAME >> ~/egwLabVars.env
    ```
 
-2. Create a keypair, if you don't have or don't any to reuse any.
+2. Create a keypair if you don't have one or don't want to reuse any.
 
    ```bash
    aws ec2 create-key-pair \
@@ -51,32 +51,34 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    -r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
    ```
 
-
 3. Create an EKS cluster with no node group.
 
-As we will only use 2 AZ in this tutorial, let's get them mapped into the env. variables AZ1 and AZ2:
-
-export AZ1=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[0].ZoneName' --out text)
-# Persist for Later Sessions in Case of Timeout
-echo export AZ1=$AZ1 >> ~/egwLabVars.env
-
-
-export AZ2=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[1].ZoneName' --out text)
-# Persist for Later Sessions in Case of Timeout
-echo export AZ2=$AZ2 >> ~/egwLabVars.env
-
-
-Create the cluster to use only 2 availability zones.
-
-eksctl create cluster \
-  --name $CLUSTERNAME \
-  --region $REGION \
-  --zones $AZ1,$AZ2 \
-  --version $K8SVERSION \
-  --vpc-cidr 192.168.0.0/22 \
-  --without-nodegroup
-
-For this workshop, we will not need many IP addresses, so a /22 network is enough for demonstrating the concept.
+   As we will only use 2 AZ in this tutorial, let's get them mapped into the environmnet variables AZ1 and AZ2:
+   
+   ```bash
+   AZ1=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[0].ZoneName' --out text)
+   # Persist for Later Sessions in Case of Timeout
+   echo export AZ1=$AZ1 >> ~/egwLabVars.env
+   ```
+   
+   ```bash
+   AZ2=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[1].ZoneName' --out text)
+   # Persist for Later Sessions in Case of Timeout
+   echo export AZ2=$AZ2 >> ~/egwLabVars.env
+   ```
+   
+   Create the cluster to use only 2 availability zones.
+   
+   ```bash
+   eksctl create cluster \
+     --name $CLUSTERNAME \
+     --region $REGION \
+     --zones $AZ1,$AZ2 \
+     --version $K8SVERSION \
+     --vpc-cidr 192.168.0.0/22 \
+     --without-nodegroup
+   ```
+   For this workshop, we will not need many IP addresses, so a /22 network is enough for demonstrating the concept.
 
 4. Cloudformation will create a VPC with 2 networks that will be used to allocate IPs for the nodes and pods.
 

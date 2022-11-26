@@ -415,8 +415,8 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     echo export HOSTSUBNETID=$HOSTSUBNETID >> ~/egwLabVars.env
     ```
     
+    Create a segurity group
     ```bash
-    # create a segurity group
     aws ec2 create-security-group \
       --group-name rmart-sg-test-host \
       --description "Security group for the test host" \
@@ -427,6 +427,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     echo export HOSTSGID=$HOSTSGID >> ~/egwLabVars.env
     ```
     
+    Open a port for ssh access
     ```bash
     aws ec2 authorize-security-group-ingress \
       --group-id $HOSTSGID \
@@ -436,6 +437,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       --no-cli-pager
     ```
     
+    Open a port for testing egress gw
     ```bash
     aws ec2 authorize-security-group-ingress \
       --group-id $HOSTSGID \

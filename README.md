@@ -752,7 +752,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
    ```bash
    aws ec2 terminate-instances \
-     --instance-ids $INSTANCEIDHOST \
+     --instance-ids $HOSTINSTANCEID \
      --no-cli-pager
    ```
 

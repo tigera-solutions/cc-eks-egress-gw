@@ -493,7 +493,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 17. Create a pod for testing
 
-    - Open another terminal
+    Open another terminal
     
     ```yaml
     # create the pod
@@ -551,7 +551,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     
     b. Test w/ egress-gw
     
-       - Open a third terminal
+       Open a third terminal
        
        ```bash
        # annotate the pod

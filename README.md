@@ -226,7 +226,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
    ```bash
    # check driver pods status
-   watch kubectl get pods -n kube-system | grep -i ebs-csi
+   kubectl get pods -n kube-system | grep -i ebs-csi
    ```
 
 9. Connect to Calico Cloud.

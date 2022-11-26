@@ -7,40 +7,50 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 > NOTE: In the following sections we'll be generating and setting some environment variables. If you're terminal session restarts you may need to reset these variables. You can use that via the following command: <p>
 `source ~/egwLabVars.env`
 
-echo "# Start Egress Gateway Lab Params" > ~/egwLabVars.env
-
-
-Proof of Concept with the following proceadure
-
 1. Define the variables:
 
-export CLUSTERNAME=rmart-egw-sp
-export REGION=sa-east-1
-export K8SVERSION=1.23
-export INSTANCETYPE=t3.large
-export KEYPAIRNAME=rmart-egw-key
+   ```bash
+   export CLUSTERNAME=rmart-egw
+   export REGION=sa-east-1
+   export K8SVERSION=1.23
+   export INSTANCETYPE=t3.large
+   export KEYPAIRNAME=rmart-egw-key
+   ```
 
-# Persist for Later Sessions in Case of Timeout
-echo export CLUSTERNAME=$CLUSTERNAME >> ~/egwLabVars.env
-echo export REGION=$REGION >> ~/egwLabVars.env
-echo export K8SVERSION=$K8SVERSION >> ~/egwLabVars.env
-echo export INSTANCETYPE=$INSTANCETYPE >> ~/egwLabVars.env
-echo export KEYPAIRNAME=$KEYPAIRNAME >> ~/egwLabVars.env
+   ```bash
+   # Persist for Later Sessions in Case of Timeout
+   echo "# Start Egress Gateway Lab Params" > ~/egwLabVars.env
+   echo export CLUSTERNAME=$CLUSTERNAME >> ~/egwLabVars.env
+   echo export REGION=$REGION >> ~/egwLabVars.env
+   echo export K8SVERSION=$K8SVERSION >> ~/egwLabVars.env
+   echo export INSTANCETYPE=$INSTANCETYPE >> ~/egwLabVars.env
+   echo export KEYPAIRNAME=$KEYPAIRNAME >> ~/egwLabVars.env
+   ```
 
 2. Create a keypair, if you don't have or don't any to reuse any.
 
-aws ec2 create-key-pair \
-  --key-name $KEYPAIRNAME \
-  --key-type rsa 
-  --region $REGION \
-  --query 'KeyMaterial' \
-  --output text > ~/.ssh/$KEYPAIRNAME.pem
+   ```bash
+   aws ec2 create-key-pair \
+     --key-name $KEYPAIRNAME \
+     --key-type rsa 
+     --region $REGION \
+     --query 'KeyMaterial' \
+     --output text > ~/.ssh/$KEYPAIRNAME.pem
+   ```
 
-chmod 400 ~/.ssh/$KEYPAIRNAME.pem
+   Change the permissions of the private key.
 
-ls -la ~/.ssh/$KEYPAIRNAME.pem
+   ```bash
+   chmod 400 ~/.ssh/$KEYPAIRNAME.pem
+   ls -la ~/.ssh/$KEYPAIRNAME.pem
+   ```
 
--r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
+   The expect output is:
+
+   ```bash
+   -r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
+   ```
+
 
 3. Create an EKS cluster with no node group.
 

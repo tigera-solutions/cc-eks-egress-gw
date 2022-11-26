@@ -125,27 +125,30 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --vpc-id $VPCID \
      --cidr 192.168.2.128/25 \
      --availability-zone $AZ2 \
+     --query 'Subnet.SubnetId' \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1B\}\] \
-       | export SUBNETIDCALICO1B=$(awk '{print $14}')
+       | export SUBNETIDCALICO1B=$(awk '{print $1}')
    ```
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
      --cidr 192.168.3.0/25 \
      --availability-zone $AZ1 \
+     --query 'Subnet.SubnetId' \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1A\}\] \
-       | export SUBNETIDEGW1A=$(awk '{print $14}')
+       | export SUBNETIDEGW1A=$(awk '{print $1}')
    ```
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
      --cidr 192.168.3.128/25 \
      --availability-zone $AZ2 \
+     --query 'Subnet.SubnetId' \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1B\}\] \
-       | export SUBNETIDEGW1B=$(awk '{print $14}')
+       | export SUBNETIDEGW1B=$(awk '{print $1}')
    ```
 
 5. Uninstall the AWS VPC CNI and install Calico CNI

@@ -38,12 +38,10 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --output text > ~/.ssh/$KEYPAIRNAME.pem
    ```
 
-     --no-cli-pager \
-
    Change the permissions of the private key.
 
    ```bash
-   chmod 400 ~/.ssh/$KEYPAIRNAME.pem
+   chmod 400 ~/.ssh/$KEYPAIRNAME.pem && \
    ls -la ~/.ssh/$KEYPAIRNAME.pem
    ```
 

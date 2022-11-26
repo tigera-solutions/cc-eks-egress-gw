@@ -493,7 +493,11 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 17. Create a pod for testing
 
-    Open another terminal
+    Open another terminal and load the environment variables:
+
+    ```bash
+    source ~/egwLabVars.env
+    ```
     
     Create the a pod named netshoot-default in the default namespace.
 
@@ -551,7 +555,11 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     
     b. Test w/ egress-gw
     
-       Open a third terminal
+       Open a third terminal and load the environment variables:
+
+       ```bash
+       source ~/egwLabVars.env
+       ```
        
        ```bash
        # annotate the pod

@@ -571,7 +571,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
               
        ```bash
        # if you want to stop the pod of using the egress-gateway, remove the annotation:  
-       kubectl annotate pods net egress.projectcalico.org/selector-
+       kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
        ```
 
 18. Create another egress gateway

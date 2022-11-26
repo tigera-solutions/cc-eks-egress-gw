@@ -498,7 +498,19 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     ```bash
     source ~/egwLabVars.env
     ```
-    
+
+    Get the pvt ip from the test host:
+
+    ```bash
+    HOSTPVTIPADDR=$(aws ec2 describe-instances \
+      --instance-ids $HOSTINSTANCEID \
+      --query "Reservations[*].Instances[*].PrivateIpAddress" \
+      --output text \
+      --no-cli-pager)
+    # Persist for Later Sessions in Case of Timeout
+    echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
+    ```
+   
     Create the a pod named netshoot-default in the default namespace.
 
     ```yaml
@@ -523,26 +535,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     
     a. Test w/o egress-gw
     
-       ```bash
-       # get the pvt ip from the test host:
-       
-       aws ec2 describe-instances \
-         --instance-ids $HOSTINSTANCEID \
-         --query "Reservations[*].Instances[*].PrivateIpAddress" \
-         --output table \
-         --no-cli-pager
-       ```
-
-       example output:
-       
-       <pre>
-       -------------------
-       |DescribeInstances|
-       +-----------------+
-       |  192.168.0.113  |
-       +-----------------+
-       </pre>
-
        ```bash      
        # connect to the pod
        kubectl exec -it netshoot-default -- /bin/bash
@@ -550,7 +542,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
        ```bash
        # nc to the test host ip
-       nc -zv 192.168.0.113 7777
+       nc -zv $HOSTPVTIPADDR 7777
        ```
 
        The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
@@ -572,7 +564,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        Go back to the pod bash prompt and repeat the nc command.
        
        ```bash
-       nc -zv 192.168.0.113 7777
+       nc -zv $HOSTPVTIPADDR 7777
        ```
        
        Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
@@ -706,6 +698,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        spec:
          containers:
          - image: nicolaka/netshoot:latest
+           env:
+           - name: HOSTPVTIPADDR
+             value: '$HOSTPVTIPADDR'         
            name: netshoot
            command: ["/bin/bash"]
            args: ["-c", "while true; do ping localhost; sleep 60; done"]
@@ -719,7 +714,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        
        ```bash
        # nc to the test host ip
-       nc -zv 192.168.0.113 7777
+       nc -zv $HOSTPVTIPADDR 7777
        ```
 
        The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
@@ -733,7 +728,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        
        ```bash
        #test again
-       nc -zv 192.168.0.113 7777
+       nc -zv $HOSTPVTIPADDR 7777
        ```
        
        ```bash
@@ -743,9 +738,14 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        Create another pod in the test namespace and test it again
        
        ```bash
-       kubectl run -it --rm -n app-test another-pod --image nicolaka/netshoot:latest
-       ````
-   
+       kubectl run -it --rm -n app-test another-pod --env="HOSTPVTIPADDR=$HOSTPVTIPADDR" --image nicolaka/netshoot:latest
+       ```
+
+       ```bash
+       #test again
+       nc -zv $HOSTPVTIPADDR 7777
+       ```
+
 ===================
 Cleaning Up the Env
 ===================

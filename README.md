@@ -118,7 +118,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --query 'Subnet.SubnetId' \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
-       | SUBNETIDCALICO1A=$(awk '{print $2}')
+       | SUBNETIDCALICO1A=$(awk '{print $1}')
    ```
    ```bash
    aws ec2 create-subnet \

@@ -96,15 +96,29 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    192.168.3.0/25        egw-pvt-1a \ Subnets for the egress gw 
    192.168.3.128/25      egw-pvt-1b / (secondary ifs and e-gws)
    </pre>
+
+   To create the new subnets we need to retrieve the VPC id from the VPC created by EKS.
+
+   ```bash
+   VPCID=$(aws eks describe-cluster \
+             --name $CLUSTERNAME \
+             --query 'cluster.resourcesVpcConfig.vpcId' \
+             --output text) && echo $VPCID
+   # Persist for Later Sessions in Case of 
+   echo export VPCID=$VPCID >> ~/egwLabVars.env   
+   ```
    
+   Now, create the subnets:
+
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
      --cidr 192.168.2.0/25 \
      --availability-zone $AZ1 \
+     --query 'Subnet.SubnetId'
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
-       | export SUBNETIDCALICO1A=$(awk '{print $14}')
+       | export SUBNETIDCALICO1A=$(awk '{print $2}')
    ```
    ```bash
    aws ec2 create-subnet \

@@ -524,7 +524,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        # get the pvt ip from the test host:
        
        aws ec2 describe-instances \
-         --instance-ids $INSTANCEIDHOST \
+         --instance-ids $HOSTINSTANCEID \
          --query "Reservations[*].Instances[*].PrivateIpAddress" \
          --output table \
          --no-cli-pager

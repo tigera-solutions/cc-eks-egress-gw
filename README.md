@@ -116,10 +116,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --cidr 192.168.2.0/25 \
      --availability-zone $AZ1 \
      --query 'Subnet.SubnetId' \
-     --no-cli-page \
      --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
-       | SUBNETIDCALICO1A=$(awk '{print $1}')
+       | export SUBNETIDCALICO1A=$(awk '{print $1}')
    ```
    ```bash
    aws ec2 create-subnet \

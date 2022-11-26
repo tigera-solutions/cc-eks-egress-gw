@@ -768,7 +768,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 3. remove ths nodegroup \
 
    ```bash
-   eksclt delete nodegroup \
+   eksctl delete nodegroup \
      --name $CLUSTERNAME-ng \
      --cluster $CLUSTERNAME
    ```

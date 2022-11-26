@@ -763,6 +763,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --group-id $HOSTSGID \
      --no-cli-pager 
    ```
+   Note: If the command fails, wait a few minutes and try again.
 
 3. remove ths nodegroup \
 

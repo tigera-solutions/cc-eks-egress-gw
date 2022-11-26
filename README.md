@@ -32,12 +32,13 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    ```bash
    aws ec2 create-key-pair \
      --key-name $KEYPAIRNAME \
-     --key-type rsa 
+     --key-type rsa \
      --region $REGION \
      --query 'KeyMaterial' \
-     --no-cli-pager \
      --output text > ~/.ssh/$KEYPAIRNAME.pem
    ```
+
+     --no-cli-pager \
 
    Change the permissions of the private key.
 

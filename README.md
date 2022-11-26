@@ -495,9 +495,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
     Open another terminal
     
+    Create the a pod named netshoot-default in the default namespace.
+
     ```yaml
-    # create the pod
-    
     kubectl create -f - <<EOF
     apiVersion: v1
     kind: Pod

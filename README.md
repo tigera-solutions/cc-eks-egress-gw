@@ -150,6 +150,15 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1B\}\] \
        | export SUBNETIDEGW1B=$(awk '{print $1}')
    ```
+   
+   ```bash
+   # Persist for Later Sessions in Case of 
+   echo export SUBNETIDCALICO1A=$SUBNETIDCALICO1A >> ~/egwLabVars.env
+   echo export SUBNETIDCALICO1B=$SUBNETIDCALICO1B >> ~/egwLabVars.env
+   echo export SUBNETIDEGW1A=$SUBNETIDEGW1A >> ~/egwLabVars.env
+   echo export SUBNETIDEGW1B=$SUBNETIDEGW1B >> ~/egwLabVars.env
+   ```
+
 
 5. Uninstall the AWS VPC CNI and install Calico CNI
    

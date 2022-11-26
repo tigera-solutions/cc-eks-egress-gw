@@ -104,7 +104,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
              --name $CLUSTERNAME \
              --query 'cluster.resourcesVpcConfig.vpcId' \
              --output text) && echo $VPCID
-   # Persist for Later Sessions in Case of 
+   # Persist for Later Sessions in Case of Timeout
    echo export VPCID=$VPCID >> ~/egwLabVars.env   
    ```
    
@@ -152,7 +152,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    ```
    
    ```bash
-   # Persist for Later Sessions in Case of 
+   # Persist for Later Sessions in Case of Timeout
    echo export SUBNETIDCALICO1A=$SUBNETIDCALICO1A >> ~/egwLabVars.env
    echo export SUBNETIDCALICO1B=$SUBNETIDCALICO1B >> ~/egwLabVars.env
    echo export SUBNETIDEGW1A=$SUBNETIDEGW1A >> ~/egwLabVars.env

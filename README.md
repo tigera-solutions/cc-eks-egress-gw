@@ -256,75 +256,84 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 11. Enable the support for the egress gateway per pod and per namespace. 
 
-kubectl patch felixconfiguration default --type='merge' -p \
-    '{"spec":{"egressIPSupport":"EnabledPerNamespaceOrPerPod"}}'
-
-
-kubectl patch felixconfiguration.p default --type='merge' -p \
-    '{"spec":{"policySyncPathPrefix":"/var/run/nodeagent"}}'
+    ```bash
+    kubectl patch felixconfiguration default --type='merge' -p \
+        '{"spec":{"egressIPSupport":"EnabledPerNamespaceOrPerPod"}}'
+    ```
+    
+    ```bash
+    kubectl patch felixconfiguration.p default --type='merge' -p \
+        '{"spec":{"policySyncPathPrefix":"/var/run/nodeagent"}}'
+    ```
 
 12. Enable the support for the secondary eni on the nodes.
 
-kubectl patch felixconfiguration default --type='merge' -p \
-    '{"spec":{"awsSecondaryIPSupport":"Enabled"}}'
+    ```bash
+    kubectl patch felixconfiguration default --type='merge' -p \
+        '{"spec":{"awsSecondaryIPSupport":"Enabled"}}'
+    ```
 
-
-# verify the nodes for aws-seconday-ipv4 support: 
-kubectl describe node `kubectl get nodes -o=jsonpath='{.items[0].metadata.name}'` | grep aws-secondary
-
+    ```bash
+    # verify the nodes for aws-seconday-ipv4 support: 
+    kubectl describe node `kubectl get nodes -o=jsonpath='{.items[0].metadata.name}'` | grep aws-secondary
+    ```
 
 13. Create the IPpools to be used by the second eni on the host and by the egress gateway.
 
-kubectl create -f - <<EOF
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: hosts-1a
-spec:
-  cidr: 192.168.3.0/26
-  allowedUses: ["HostSecondaryInterface"]
-  awsSubnetID: $SUBNETIDEGW1A
-  blockSize: 32
-  disableBGPExport: true
----
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: egress-red-1a
-spec:
-  cidr: 192.168.3.64/31
-  allowedUses: ["Workload"]
-  awsSubnetID: $SUBNETIDEGW1A
-  blockSize: 32
-  nodeSelector: "!all()"
-  disableBGPExport: true
----
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: hosts-1b
-spec:
-  cidr: 192.168.3.128/26
-  allowedUses: ["HostSecondaryInterface"]
-  awsSubnetID: $SUBNETIDEGW1B
-  blockSize: 32
-  disableBGPExport: true
----
-apiVersion: projectcalico.org/v3
-kind: IPPool
-metadata:
-  name: egress-red-1b
-spec:
-  cidr: 192.168.3.192/31
-  allowedUses: ["Workload"]
-  awsSubnetID: $SUBNETIDEGW1B
-  blockSize: 32
-  nodeSelector: "!all()"
-  disableBGPExport: true
-EOF
+    ```yaml
+    kubectl create -f - <<EOF
+    apiVersion: projectcalico.org/v3
+    kind: IPPool
+    metadata:
+      name: hosts-1a
+    spec:
+      cidr: 192.168.3.0/26
+      allowedUses: ["HostSecondaryInterface"]
+      awsSubnetID: $SUBNETIDEGW1A
+      blockSize: 32
+      disableBGPExport: true
+    ---
+    apiVersion: projectcalico.org/v3
+    kind: IPPool
+    metadata:
+      name: egress-red-1a
+    spec:
+      cidr: 192.168.3.64/31
+      allowedUses: ["Workload"]
+      awsSubnetID: $SUBNETIDEGW1A
+      blockSize: 32
+      nodeSelector: "!all()"
+      disableBGPExport: true
+    ---
+    apiVersion: projectcalico.org/v3
+    kind: IPPool
+    metadata:
+      name: hosts-1b
+    spec:
+      cidr: 192.168.3.128/26
+      allowedUses: ["HostSecondaryInterface"]
+      awsSubnetID: $SUBNETIDEGW1B
+      blockSize: 32
+      disableBGPExport: true
+    ---
+    apiVersion: projectcalico.org/v3
+    kind: IPPool
+    metadata:
+      name: egress-red-1b
+    spec:
+      cidr: 192.168.3.192/31
+      allowedUses: ["Workload"]
+      awsSubnetID: $SUBNETIDEGW1B
+      blockSize: 32
+      nodeSelector: "!all()"
+      disableBGPExport: true
+    EOF
+    ```
 
-# check the ippools creation
-kubectl get ippools -o wide
+    ```bash
+    # check the ippools creation
+    kubectl get ippools -o wide
+    ```
 
 14. Copy the pull secret from calico-system ns to the default ns for allow the download of the egw image
 

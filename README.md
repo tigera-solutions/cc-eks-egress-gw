@@ -423,6 +423,8 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
       --vpc-id $VPCID \
       --output yaml | export HOSTSGID=$(awk '{print $2}') \
       && echo $HOSTSGID
+    # Persist for Later Sessions in Case of Timeout
+    echo export HOSTSGID=$HOSTSGID >> ~/egwLabVars.env
     ```
     
     ```bash

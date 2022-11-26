@@ -746,9 +746,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
        nc -zv $HOSTPVTIPADDR 7777
        ```
 
-===================
-Cleaning Up the Env
-===================
+## Cleaning Up the Env
 
 1. remove the test host
 

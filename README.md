@@ -82,7 +82,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
 4. Cloudformation will create a VPC with 2 networks that will be used to allocate IPs for the nodes and pods.
 
-   ![eks-cloudformation-vpc](https://user-images.githubusercontent.com/104035488/204159806-f9a547c9-f5ac-4365-b6a5-a8597a43e017.png)
+   ![eks-cloudformation-vpc](https://user-images.githubusercontent.com/104035488/204159993-da381eb6-3ad7-4001-8245-b12244806792.png)
 
    As we will use Calico CNI, let's create subnets for the default ippool. Also, lets create subnets to be used for the egress gateway.
    

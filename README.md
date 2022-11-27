@@ -161,6 +161,8 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    echo export SUBNETIDEGW1B=$SUBNETIDEGW1B >> ~/egwLabVars.env
    ```
 
+   ![subnets-created](https://user-images.githubusercontent.com/104035488/204161704-b983eec0-358d-4b17-a68c-d5698a795680.png)
+
 
 5. Uninstall the AWS VPC CNI and install Calico CNI
    
@@ -230,6 +232,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    # check driver pods status
    kubectl get pods -n kube-system | grep -i ebs-csi
    ```
+   
+   ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204161743-70e74676-27e9-40b2-9cb7-221e94e82b4f.png)
+
 
 9. Connect to Calico Cloud.
 
@@ -404,6 +409,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
             name: policysync
     EOF
     ```
+
+    ![egress-gateway](https://user-images.githubusercontent.com/104035488/204161797-53e5457f-824c-4f15-8067-4911710afc78.png)
+
 
 16. Create a test host to see the packets details from outside the eks cluster.
 

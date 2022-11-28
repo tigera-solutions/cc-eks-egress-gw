@@ -710,19 +710,19 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       EOF
       ```
       
-    Verify the pods created for the egress gateway `blue`.
+      Verify the pods created for the egress gateway `blue`.
+  
+      ```bash
+      kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+      ```
+  
+    - Test the egress gateway selecting a namespace instead of a pod this time.
 
-    ```bash
-    kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
-    ```
+      Create the namespace  `app-test`.
 
-    Test the egress gateway selecting a namespace instead of a pod this time.
-
-    Create the namespace  `app-test`.
-
-    ```bash
-    kubectl create ns app-test
-    ```
+      ```bash
+      kubectl create ns app-test
+      ```
 
     - **I.** First create test traffic to the test host from a pod in the `app-test` namespace without using the egress gateway.
     

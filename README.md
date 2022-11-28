@@ -431,7 +431,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     ![egress-gateway-Egress Gateway created](https://user-images.githubusercontent.com/104035488/204313504-6f2b61ed-2b66-4ed0-ab29-d057afc61504.png)
 
-15. Create a test host to see the packets details from outside the EKS cluster.
+15. Create a test host to see the details of the packets received outside the EKS cluster.
 
     Retrieve the `subnet-id` of the public subnet created by the EKS to be used in your test host.
     

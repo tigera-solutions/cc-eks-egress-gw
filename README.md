@@ -566,19 +566,19 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     EOF
     ```
     
-    a. Test w/o egress-gw
+    - a. Test w/o egress-gw
     
-       ```bash      
-       # connect to the pod
-       kubectl exec -it netshoot-default -- /bin/bash
-       ```
+      ```bash      
+      # connect to the pod
+      kubectl exec -it netshoot-default -- /bin/bash
+      ```
 
-       ```bash
-       # nc to the test host ip
-       nc -zv $HOSTPVTIPADDR 7777
-       ```
+      ```bash
+      # nc to the test host ip
+      nc -zv $HOSTPVTIPADDR 7777
+      ```
 
-       The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
+      The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
        
     
     b. Test w/ egress-gw

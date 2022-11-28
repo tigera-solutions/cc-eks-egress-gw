@@ -235,10 +235,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    ```
    ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168153-7a58c266-6b2c-47fb-97d4-0e9d50ff7190.png)
 
-<!--
-   ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204161743-70e74676-27e9-40b2-9cb7-221e94e82b4f.png)
--->
-
 9. Connect to Calico Cloud.
 
    Connect your EKS cluster to [Calico Cloud](https://www.calicocloud.io/)
@@ -412,10 +408,8 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
             name: policysync
     EOF
     ```
-    ![egress-gateway-Copy of Page-3 (1)](https://user-images.githubusercontent.com/104035488/204168182-adaac825-70ad-4c73-9cd3-daab12b30f81.png)
+    ![egress-gateway(https://user-images.githubusercontent.com/104035488/204168182-adaac825-70ad-4c73-9cd3-daab12b30f81.png)
 
-    ![egress-gateway](https://user-images.githubusercontent.com/104035488/204167528-28b5fdb6-4192-412a-a735-f82561c1493b.png)
- 
 16. Create a test host to see the packets details from outside the eks cluster.
 
     ```bash
@@ -481,7 +475,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
     
-    ![egress-gateway-Copy of Copy of Page-3 (1)](https://user-images.githubusercontent.com/104035488/204168194-212dcb3c-228e-4e56-9b0a-39534852d02f.png)
+    ![test-host](https://user-images.githubusercontent.com/104035488/204168194-212dcb3c-228e-4e56-9b0a-39534852d02f.png)
 
     Retrive the host ip address, so you can ssh into it.
 

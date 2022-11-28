@@ -479,7 +479,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --no-cli-pager
     ```
 
-    Create a test host to observe the packets outside the cluster.
+    Create the test host to receive and analyze the packets outside the EKS cluster.
 
     ```bash
     aws ec2 run-instances \
@@ -496,6 +496,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     # Persist for later sessions in case of disconnection.
     echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
+    
+    Once the test host is create, you should have the following in your AWS infrastructure:
+
     ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
 
     Retrive the host ip address, so you can ssh into it.

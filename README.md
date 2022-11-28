@@ -566,7 +566,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     EOF
     ```
     
-    - I. First test the acess to the test host without using the egress gateway.
+    - <pre>I</pre>. First test the acess to the test host without using the egress gateway.
     
       Access the pod's shell.
       

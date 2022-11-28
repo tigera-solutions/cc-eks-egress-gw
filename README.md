@@ -54,21 +54,21 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 3. Create an EKS cluster with no node group.
 
-   As we will only use 2 AZ in this tutorial, let's get them mapped into the environmnet variables AZ1 and AZ2:
+   As we will only use 2 AZ in this workshop, let's get them mapped into the environment variables AZ1 and AZ2:
    
    ```bash
    AZ1=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[0].ZoneName' --out text)
-   # Persist for Later Sessions in Case of Timeout
+   # Persist for later sessions in case of disconnection.
    echo export AZ1=$AZ1 >> ~/egwLabVars.env
    ```
    
    ```bash
    AZ2=$(aws ec2 describe-availability-zones --region $REGION --query 'AvailabilityZones[1].ZoneName' --out text)
-   # Persist for Later Sessions in Case of Timeout
+   # Persist for later sessions in case of disconnection.
    echo export AZ2=$AZ2 >> ~/egwLabVars.env
    ```
    
-   Create the cluster to using only the 2 availability zones.
+   Create the cluster to using only the 2 availability zones mapped in the previous step:
    
    ```bash
    eksctl create cluster \
@@ -79,17 +79,28 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --vpc-cidr 192.168.0.0/22 \
      --without-nodegroup
    ```
-   For this workshop, we will not need many IP addresses, so a /22 network is enough for demonstrating the concept.
+   
+   For this workshop, we will not need many IP addresses, so a `/22` network is enough for demonstrating the concept.
 
-4. Cloudformation will create a VPC with 2 networks that will be used to allocate IPs for the nodes and pods.
-
+4. After running the `eksctl create cluster` command, the AWS Cloudformation will create a VPC with two subnets per availability zone that will be used to allocate IPs for the nodes and pods. The subnets created are two public (one per availability zone) and two private (one per availability zone). This is done to allow you to deploy nodes in a public or private subnet according to your needs. By default, the node groups create nodes in the public subnets. 
    
    ![egress-gateway-Page-2](https://user-images.githubusercontent.com/104035488/204168127-978e4f60-c83d-4d52-bcae-4b8db4468bf9.png)
 
-   As we will use Calico CNI, let's create subnets for the default ippool. Also, lets create subnets to be used for the egress gateway.
+   As we will use Calico CNI, let's create subnets for its default ippool. Also, let's define subnets to be used for the egress gateway.
    
-   The final ip subnet distribution will look like:
+   The final subnet segmentation of the VPC IP address `192.168.0.0/22` will look like:
    
+   | Subnet address     |  Range of addresses             | # of Hosts | Description                                 | 
+   | ------------------ | ------------------------------- | :--------: | ------------------------------------------- |
+   | 192.168.0.0/25	   | 192.168.0.0 - 192.168.0.127	    | 126        | EKS public subnet in AZ1			            |
+   | 192.168.0.128/25	| 192.168.0.128 - 192.168.0.255	 | 126        | EKS public subnet in AZ2                    |
+   | 192.168.1.0/25   	| 192.168.1.0 - 192.168.1.127	    | 126        | EKS private subnet in AZ1                   |
+   | 192.168.1.128/25	| 192.168.1.128 - 192.168.1.255	 | 126        | EKS private subnet in AZ2                   |
+   | 192.168.2.0/25	   | 192.168.2.0 - 192.168.2.127	    | 126        | Calico default IPPOOL private subnet in AZ1	|
+   | 192.168.2.128/25	| 192.168.2.128 - 192.168.2.255	 | 126        | Calico default IPPOOL private subnet in AZ2 |
+   | 192.168.3.0/25	   | 192.168.3.0 - 192.168.3.127	    | 126        | Egress gateway IPPOOL private subnet in AZ1	|
+   | 192.168.3.128/25	| 192.168.3.128 - 192.168.3.255	 | 126        | Egress gateway IPPOOL private subnet in AZ2 |
+
    <pre>
    192.168.0.0/25        eks-pub-1a \
    192.168.0.128/25      eks-pub-1b | Created by eksctl

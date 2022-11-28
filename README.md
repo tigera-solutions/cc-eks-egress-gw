@@ -408,7 +408,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
             name: policysync
     EOF
     ```
-    ![egress-gateway(https://user-images.githubusercontent.com/104035488/204168182-adaac825-70ad-4c73-9cd3-daab12b30f81.png)
+    ![egress-gateway](https://user-images.githubusercontent.com/104035488/204168182-adaac825-70ad-4c73-9cd3-daab12b30f81.png)
 
 16. Create a test host to see the packets details from outside the eks cluster.
 

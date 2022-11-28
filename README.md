@@ -429,7 +429,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```
     After the egress gateway creation, you will have the following:
 
-    ![egress-gateway-red](https://user-images.githubusercontent.com/104035488/204311809-85334e5d-7208-4bd8-a6e5-b627f209b041.png)
+    ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
 
 16. Create a test host to see the packets details from outside the eks cluster.
 

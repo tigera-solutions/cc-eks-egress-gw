@@ -828,7 +828,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --group-id $HOSTSGID \
      --no-cli-pager 
    ```
-   **Note**: If the command fails, wait a few minutes and try again.
+   > **Note**: If the command fails, wait a few minutes and try again.
 
 3. Remove the nodegroup 
 

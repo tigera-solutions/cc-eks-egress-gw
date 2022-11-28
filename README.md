@@ -614,41 +614,43 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     Create another egress gateway
 
-    a. Create an IP pool for the blue egress gw
+    - **I.** Create an IP pool for the blue egress gw
     
-       ```yaml
-       kubectl apply -f - <<EOF
-       apiVersion: projectcalico.org/v3
-       kind: IPPool
-       metadata:
-         name: egress-blue-1a
-       spec:
-         cidr: 192.168.3.66/31
-         allowedUses: ["Workload"]
-         awsSubnetID: $SUBNETIDEGW1A
-         blockSize: 32
-         nodeSelector: "!all()"
-         disableBGPExport: true
-       ---
-       apiVersion: projectcalico.org/v3
-       kind: IPPool
-       metadata:
-         name: egress-blue-1b
-       spec:
-         cidr: 192.168.3.194/31
-         allowedUses: ["Workload"]
-         awsSubnetID: $SUBNETIDEGW1B
-         blockSize: 32
-         nodeSelector: "!all()"
-         disableBGPExport: true
-       EOF
-       ```
-       
-       ```bash
-       kubectl get ippools
-       ```
+      ```yaml
+      kubectl apply -f - <<EOF
+      apiVersion: projectcalico.org/v3
+      kind: IPPool
+      metadata:
+        name: egress-blue-1a
+      spec:
+        cidr: 192.168.3.66/31
+        allowedUses: ["Workload"]
+        awsSubnetID: $SUBNETIDEGW1A
+        blockSize: 32
+        nodeSelector: "!all()"
+        disableBGPExport: true
+      ---
+      apiVersion: projectcalico.org/v3
+      kind: IPPool
+      metadata:
+        name: egress-blue-1b
+      spec:
+        cidr: 192.168.3.194/31
+        allowedUses: ["Workload"]
+        awsSubnetID: $SUBNETIDEGW1B
+        blockSize: 32
+        nodeSelector: "!all()"
+        disableBGPExport: true
+      EOF
+      ```
+      
+      Verify the created  `IPPOOL's`
+
+      ```bash
+      kubectl get ippools
+      ```
     
-    b. Create the blue egw
+    - **II.** Create the blue egw
 
        ```bash
        kubectl apply -f - <<EOF

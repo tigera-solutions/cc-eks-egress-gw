@@ -360,7 +360,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     kubectl get ippools -o wide
     ```
 
-14. Copy the pull secret from calico-system namespace to the default namespace to authorize the download of the egress gateway image.
+13. Copy the pull secret from calico-system namespace to the default namespace to authorize the download of the egress gateway image.
 
     ```bash
     kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \
@@ -368,7 +368,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
        kubectl apply --namespace=default -f -
     ```
 
-15. Create the egress gateway `red` in the default namespace.
+14. Create the egress gateway `red` in the default namespace.
 
     ```yaml
     kubectl apply -f - <<EOF
@@ -431,7 +431,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     ![egress-gateway-Egress Gateway created](https://user-images.githubusercontent.com/104035488/204313504-6f2b61ed-2b66-4ed0-ab29-d057afc61504.png)
 
-16. Create a test host to see the packets details from outside the eks cluster.
+15. Create a test host to see the packets details from outside the eks cluster.
 
     ```bash
     # get the subnet id of the host az1 subnet
@@ -520,7 +520,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     sudo tcpdump -v -ni eth0 tcp port 7777 
     ```
 
-17. Create a pod for testing
+16. Create a pod for testing
 
     Open another terminal and load the environment variables:
 
@@ -603,7 +603,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
        kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
        ```
 
-18. Create another egress gateway
+17. Create another egress gateway
 
     a. Create an IP pool for the blue egress gw
     
@@ -703,7 +703,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
        kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
        ```
 
-19. Test the new egw selecting a namespace instead of a pod this time.
+18. Test the new egw selecting a namespace instead of a pod this time.
 
     ```bash
     #create a ns

@@ -429,7 +429,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```
     After the egress gateway creation, you will have the following:
 
-    ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
+    ![egress-gateway-Egress Gateway created](https://user-images.githubusercontent.com/104035488/204313504-6f2b61ed-2b66-4ed0-ab29-d057afc61504.png)
 
 16. Create a test host to see the packets details from outside the eks cluster.
 
@@ -495,8 +495,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     # Persist for later sessions in case of disconnection.
     echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
-    
-    ![test-host](https://user-images.githubusercontent.com/104035488/204168194-212dcb3c-228e-4e56-9b0a-39534852d02f.png)
+    ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
 
     Retrive the host ip address, so you can ssh into it.
 

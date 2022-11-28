@@ -170,7 +170,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    ![subnets-created](https://user-images.githubusercontent.com/104035488/204161704-b983eec0-358d-4b17-a68c-d5698a795680.png)
 
 
-5. ### Uninstall the AWS VPC CNI and install Calico CNI**
+### 5. Uninstall the AWS VPC CNI and install Calico CNI**
    
    Uninstall AWS VPN CNI
 

@@ -566,47 +566,47 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     EOF
     ```
     
-    - a. Test w/o egress-gw
+    - I. First test the acess to the test host without using the egress gateway.
     
+      Access the pod's shell.
+      
       ```bash      
-      # connect to the pod
       kubectl exec -it netshoot-default -- /bin/bash
       ```
 
+      User netcat to create a connection to the test host, on the port 7777. 
+     
       ```bash
-      # nc to the test host ip
       nc -zv $HOSTPVTIPADDR 7777
       ```
 
-      The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
-       
+      Check the test host terminal. The packets captured with tcpdump shows the **node IP address** as source IP for the incomming packet. 
+
+    - II. Test w/ egress-gw
     
-    b. Test w/ egress-gw
-    
-       Open a third terminal and load the environment variables:
-
-       ```bash
-       source ~/egwLabVars.env
-       ```
-       
-       ```bash
-       # annotate the pod
-       kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'red'"
-       ```
-
-       Go back to the pod bash prompt and repeat the nc command.
-       
-       ```bash
-       nc -zv $HOSTPVTIPADDR 7777
-       ```
-       
-       Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
-              
-       ```bash
-       # if you want to stop the pod of using the egress-gateway, remove the annotation:  
-       kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
-       ```
-
+      Open a third terminal and load the environment variables:
+      
+      ```bash
+      source ~/egwLabVars.env
+      ```
+      
+      ```bash
+      # annotate the pod
+      kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'red'"
+      ```
+      
+      Go back to the pod bash prompt and repeat the nc command.
+      
+      ```bash
+      nc -zv $HOSTPVTIPADDR 7777
+      ```
+      
+      Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
+             
+      ```bash
+      # if you want to stop the pod of using the egress-gateway, remove the annotation:  
+      kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
+      ```
 17. Create another egress gateway
 
     a. Create an IP pool for the blue egress gw

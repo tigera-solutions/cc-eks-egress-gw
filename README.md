@@ -17,7 +17,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    export KEYPAIRNAME=rmart-egw-key
    ```
 
-   Persist for Later Sessions in Case of Timeout
+   Persist the enviroment variables for later sessions in case of disconnetion.
    
    ```bash
    echo "# Start Egress Gateway Lab Params" > ~/egwLabVars.env

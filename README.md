@@ -278,7 +278,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    EOF
    ```
 
-11. Enable the support for the egress gateway per pod and per namespace. 
+10. Enable the support for the egress gateway per pod and per namespace. 
 
     ```bash
     kubectl patch felixconfiguration default --type='merge' -p \
@@ -290,7 +290,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
         '{"spec":{"policySyncPathPrefix":"/var/run/nodeagent"}}'
     ```
 
-12. Enable the support for the secondary eni on the nodes.
+11. Enable the support for the secondary ENI on the nodes.
 
     ```bash
     kubectl patch felixconfiguration default --type='merge' -p \
@@ -302,7 +302,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     kubectl describe node `kubectl get nodes -o=jsonpath='{.items[0].metadata.name}'` | grep aws-secondary
     ```
 
-13. Create the IPpools to be used by the second eni on the nodes and by the egress gateway.
+12. Create the IPPOOLS to be used by the second ENI on the nodes and by the egress gateway.
 
     ```yaml
     kubectl create -f - <<EOF
@@ -354,12 +354,13 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     EOF
     ```
 
+    Check the ippools creation
+
     ```bash
-    # check the ippools creation
     kubectl get ippools -o wide
     ```
 
-14. Copy the pull secret from calico-system ns to the default ns to authorize the download of the egw image
+14. Copy the pull secret from calico-system namespace to the default namespace to authorize the download of the egress gateway image.
 
     ```bash
     kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \
@@ -367,7 +368,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
        kubectl apply --namespace=default -f -
     ```
 
-15. Install the egress gw red in the default namespace.
+15. Create the egress gateway `red` in the default namespace.
 
     ```yaml
     kubectl apply -f - <<EOF
@@ -426,6 +427,8 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
             name: policysync
     EOF
     ```
+    After the egress gateway creation, you will have the following:
+
     ![egress-gateway](https://user-images.githubusercontent.com/104035488/204168182-adaac825-70ad-4c73-9cd3-daab12b30f81.png)
 
 16. Create a test host to see the packets details from outside the eks cluster.

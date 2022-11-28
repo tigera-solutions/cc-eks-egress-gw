@@ -574,7 +574,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl exec -it netshoot-default -- /bin/bash
       ```
 
-      User netcat to create a connection to the test host, on the port 7777. 
+      User `netcat` to create a connection to the test host, on the port 7777. 
      
       ```bash
       nc -zv $HOSTPVTIPADDR 7777
@@ -582,29 +582,31 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
       Check the test host terminal. The packets captured with tcpdump shows the **node IP address** as source IP for the incomming packet. 
 
-    - II. Now let's test the acess to the test host using the egress gateway `red`, previouly created.
+    - **II.** Now let's test the acess to the test host using the egress gateway `red`, previouly created.
     
       Open a third terminal and load the environment variables:
       
       ```bash
       source ~/egwLabVars.env
       ```
-      
+
+      Annotate the `netshoot-default` pod as following. This will cause the pod to use the egress gateway for egress traffic.
+
       ```bash
-      # annotate the pod
       kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'red'"
       ```
       
-      Go back to the pod bash prompt and repeat the nc command.
+      Go back to the terminal with the pod bash prompt and repeat the `netcat` command.
       
       ```bash
       nc -zv $HOSTPVTIPADDR 7777
       ```
       
-      Now the packet captured with tcpdump in the test host shows the egress gateway IP as source IP. 
+      Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
              
+      You can stop the pod of using the egress gateway by removing the annotation previously done.
+
       ```bash
-      # if you want to stop the pod of using the egress-gateway, remove the annotation:  
       kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
       ```
 17. Create another egress gateway

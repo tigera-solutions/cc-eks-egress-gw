@@ -574,7 +574,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl exec -it netshoot-default -- /bin/bash
       ```
 
-      User `netcat` to create a connection to the test host, on the port 7777. 
+      Use `netcat` to create a connection to the test host, on the port 7777. 
      
       ```bash
       nc -zv $HOSTPVTIPADDR 7777
@@ -614,7 +614,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     Create another egress gateway
 
-    - **I.** Create the `IPPool's` for the egress gateway `blue`.
+    - Create the `IPPool's` for the egress gateway `blue`.
     
       ```yaml
       kubectl apply -f - <<EOF
@@ -650,7 +650,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl get ippools
       ```
     
-    - **II.** Create the egress gateway `blue`.
+    - Create the egress gateway `blue`.
 
       ```yaml
       kubectl apply -f - <<EOF
@@ -716,77 +716,94 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
       ```
 
-    Test the egress gateway selecting a namespace instead of a pod this time.
+      Test the egress gateway selecting a namespace instead of a pod this time.
 
-    Create the namespace  `app-test`.
+      Create the namespace  `app-test`.
 
-    ```bash
-    kubectl create ns app-test
-    ```
+      ```bash
+      kubectl create ns app-test
+      ```
 
-    - **I.** First test the test host from a pod in the `app-test` namespace without using the egress gateway.
-    
-       Create a pod and test
-       
-       ```yaml
-       kubectl create -f - <<EOF
-       apiVersion: v1
-       kind: Pod
-       metadata:
-         name: netshoot-app-test
-         namespace: app-test
-         labels:
-           app: netshoot
-       spec:
-         containers:
-         - image: nicolaka/netshoot:latest
-           env:
-           - name: HOSTPVTIPADDR
-             value: '$HOSTPVTIPADDR'         
-           name: netshoot
-           command: ["/bin/bash"]
-           args: ["-c", "while true; do ping localhost; sleep 60; done"]
-       EOF
-       ```
-       
-       ```bash
-       # connect to the pod
-       kubectl exec -it -n app-test netshoot-app-test -- /bin/bash
-       ```
-       
-       ```bash
-       # nc to the test host ip
-       nc -zv $HOSTPVTIPADDR 7777
-       ```
+      - **I.** First create test traffic to the test host from a pod in the `app-test` namespace without using the egress gateway.
+      
+        Create the pod `netshoot-app-test` in the `app-test` namespace.
+        
+        ```yaml
+        kubectl create -f - <<EOF
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: netshoot-app-test
+          namespace: app-test
+          labels:
+            app: netshoot
+        spec:
+          containers:
+          - image: nicolaka/netshoot:latest
+            env:
+            - name: HOSTPVTIPADDR
+              value: '$HOSTPVTIPADDR'         
+            name: netshoot
+            command: ["/bin/bash"]
+            args: ["-c", "while true; do ping localhost; sleep 60; done"]
+        EOF
+        ```
+        
+        From the second terminal, execute the shell in the pod `netshoot-app-test`.
 
-       The packet captured with tcpdump in the test host shows the cluster IP as source IP. 
-    
-    b. Annotate the namespace to startu using the egress gateway.
+        ```bash
+        kubectl exec -it -n app-test netshoot-app-test -- /bin/bash
+        ```
 
-       ```bash 
-       kubectl annotate ns app-test egress.projectcalico.org/selector="egress-code == 'blue'"
-       kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector="projectcalico.org/name == 'default'"
-       ```
-       
-       ```bash
-       #test again
-       nc -zv $HOSTPVTIPADDR 7777
-       ```
-       
-       ```bash
-       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
-       ```
+        Use `netcat` to create a connection to the test host, on the port 7777.
+        
+        ```bash
+        # nc to the test host ip
+        nc -zv $HOSTPVTIPADDR 7777
+        ```
 
-       Create another pod in the test namespace and test it again
-       
-       ```bash
-       kubectl run -it --rm -n app-test another-pod --env="HOSTPVTIPADDR=$HOSTPVTIPADDR" --image nicolaka/netshoot:latest
-       ```
+        Check again the terminal connected to the test host. The packets captured with `tcpdump` shows the **node IP address** as source IP for the incomming packet.
 
-       ```bash
-       #test again
-       nc -zv $HOSTPVTIPADDR 7777
-       ```
+        
+      - **II.** Annotate the namespace `app-test` to start using the egress gateway `blue`.
+
+        On the third terminal, create the following annotations to the namespace `app-test`.
+
+        ```bash 
+        kubectl annotate ns app-test egress.projectcalico.org/selector="egress-code == 'blue'"
+        kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector="projectcalico.org/name == 'default'"
+        ```
+        
+        On the second terminal, executing the shell on the `netshoot-app-test` pod, run the following `netcat` command.
+        
+        ```bash
+        nc -zv $HOSTPVTIPADDR 7777
+        ```
+        
+        If you are confused about the IP addresses, you can run the following kubectl command to see the egress gateway and the nodes with their IP addresses.
+
+        ```bash
+        kubectl get nodes -o=custom-columns='NAME:.metadata.name,INTERNAL IPADDR:.status.addresses[?(@.type == "InternalIP")].address'
+        kubectl get pods  -o=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+        ```  
+        
+        Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
+             
+      You can stop the pod of using the egress gateway by removing the annotation previously done.
+
+      ```bash
+      kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
+      ```
+
+      - **III.** Create another pod in the test namespace and test it again
+        
+        ```bash
+        kubectl run -it --rm -n app-test another-pod --env="HOSTPVTIPADDR=$HOSTPVTIPADDR" --image nicolaka/netshoot:latest
+        ```  
+        ```bash
+        #test again
+        nc -zv $HOSTPVTIPADDR 7777
+        ```
 
 ## Cleaning up the environment
 

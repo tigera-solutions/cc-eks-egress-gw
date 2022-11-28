@@ -716,15 +716,13 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
       ```
   
-    - Test the egress gateway selecting a namespace instead of a pod this time.
+    - Create the namespace `app-test` and the pod `netshoot-app-test` for the test.
 
       Create the namespace  `app-test`.
 
       ```bash
       kubectl create ns app-test
       ```
-
-    - **I.** First create test traffic to the test host from a pod in the `app-test` namespace without using the egress gateway.
     
       Create the pod `netshoot-app-test` in the `app-test` namespace.
       
@@ -748,7 +746,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
           args: ["-c", "while true; do ping localhost; sleep 60; done"]
       EOF
       ```
-      
+
+    - **I.** First create test traffic to the test host from a pod in the `app-test` namespace without using the egress gateway.
+
       From the second terminal, execute the shell in the pod `netshoot-app-test`.
 
       ```bash

@@ -531,6 +531,12 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```bash
     source ~/egwLabVars.env
     ```
+    
+    Update the kubeconfig, if needed.
+
+    ```bash
+    aws eks update-kubeconfig --name $CLUSTERNAME --region $REGION 
+    ```
 
     Retrive the private IP address of the test host.
 
@@ -582,12 +588,25 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
       Check the test host terminal. The packets captured with tcpdump shows the **node IP address** as source IP for the incomming packet. 
 
+      If you are confused about the IP addresses, you can run the following kubectl command to see the egress gateway and the nodes with their IP addresses.
+
+      ```bash
+      kubectl get nodes -o=custom-columns='NAME:.metadata.name,INTERNAL IPADDR:.status.addresses[?(@.type == "InternalIP")].address'
+      kubectl get pods  -o=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+      ```  
+
     - **II.** Now let's test the acess to the test host using the egress gateway `red`, previouly created.
     
       Open a third terminal and load the environment variables:
       
       ```bash
       source ~/egwLabVars.env
+      ```
+      
+      Update the kubeconfig, if needed.
+
+      ```bash
+      aws eks update-kubeconfig --name $CLUSTERNAME --region $REGION 
       ```
 
       Annotate the `netshoot-default` pod as following. This will cause the pod to use the egress gateway for egress traffic.
@@ -779,14 +798,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       ```bash
       nc -zv $HOSTPVTIPADDR 7777
       ```
-      
-      If you are confused about the IP addresses, you can run the following kubectl command to see the egress gateway and the nodes with their IP addresses.
-
-      ```bash
-      kubectl get nodes -o=custom-columns='NAME:.metadata.name,INTERNAL IPADDR:.status.addresses[?(@.type == "InternalIP")].address'
-      kubectl get pods  -o=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
-      ```  
-      
+            
       Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
            
       You can stop the pod of using the egress gateway by removing the annotation previously done.

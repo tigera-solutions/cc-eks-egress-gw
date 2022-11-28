@@ -524,7 +524,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     sudo tcpdump -v -ni eth0 tcp port 7777 
     ```
 
-16. Testing egress gateway for a **POD**. 
+16. Testing egress gateway with a **POD**. 
 
     Open another terminal and load the environment variables:
 
@@ -610,11 +610,11 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
       ```
 
-17. Testing egress gateway for a **NAMESPACE**
+17. Testing egress gateway with a **NAMESPACE**
 
     Create another egress gateway
 
-    - **I.** Create an IP pool for the blue egress gw
+    - **I.** Create the `IPPool's` for the egress gateway `blue`.
     
       ```yaml
       kubectl apply -f - <<EOF
@@ -650,78 +650,81 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       kubectl get ippools
       ```
     
-    - **II.** Create the blue egw
+    - **II.** Create the egress gateway `blue`.
 
-       ```bash
-       kubectl apply -f - <<EOF
-       apiVersion: apps/v1
-       kind: Deployment
-       metadata:
-         name: egress-gateway-blue
-         namespace: default
-         labels:
-           egress-code: blue
-       spec:
-         replicas: 2
-         selector:
-           matchLabels:
-             egress-code: blue
-         template:
-           metadata:
-             annotations:
-               cni.projectcalico.org/ipv4pools: '["egress-blue-1a","egress-blue-1b"]'
-             labels:
-               egress-code: blue
-           spec:
-             topologySpreadConstraints:
-             - maxSkew: 1
-               topologyKey: topology.kubernetes.io/zone
-               whenUnsatisfiable: DoNotSchedule
-               labelSelector: 
-                 matchLabels:
-                   egress-code: blue
-             imagePullSecrets:
-             - name: tigera-pull-secret
-             nodeSelector:
-               kubernetes.io/os: linux
-             containers:
-             - name: egress-gateway
-               image: quay.io/tigera/egress-gateway:v3.14.1
-               env:
-               - name: EGRESS_POD_IP
-                 valueFrom:
-                   fieldRef:
-                     fieldPath: status.podIP
-               securityContext:
-                 privileged: true
-               volumeMounts:
-               - mountPath: /var/run
-                 name: policysync
-               resources:
-                 requests:
-                   projectcalico.org/aws-secondary-ipv4: 1
-                 limits:
-                   projectcalico.org/aws-secondary-ipv4: 1
-             terminationGracePeriodSeconds: 0
-             volumes:
-             - flexVolume:
-                 driver: nodeagent/uds
-               name: policysync
-       EOF
-       ```
-       
-       ```bash
-       kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
-       ```
+      ```yaml
+      kubectl apply -f - <<EOF
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: egress-gateway-blue
+        namespace: default
+        labels:
+          egress-code: blue
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            egress-code: blue
+        template:
+          metadata:
+            annotations:
+              cni.projectcalico.org/ipv4pools: '["egress-blue-1a","egress-blue-1b"]'
+            labels:
+              egress-code: blue
+          spec:
+            topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: topology.kubernetes.io/zone
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector: 
+                matchLabels:
+                  egress-code: blue
+            imagePullSecrets:
+            - name: tigera-pull-secret
+            nodeSelector:
+              kubernetes.io/os: linux
+            containers:
+            - name: egress-gateway
+              image: quay.io/tigera/egress-gateway:v3.14.1
+              env:
+              - name: EGRESS_POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              securityContext:
+                privileged: true
+              volumeMounts:
+              - mountPath: /var/run
+                name: policysync
+              resources:
+                requests:
+                  projectcalico.org/aws-secondary-ipv4: 1
+                limits:
+                  projectcalico.org/aws-secondary-ipv4: 1
+            terminationGracePeriodSeconds: 0
+            volumes:
+            - flexVolume:
+                driver: nodeagent/uds
+              name: policysync
+      EOF
+      ```
+      
+      Verify the pods created for the egress gateway `blue`.
 
-18. Test the new egw selecting a namespace instead of a pod this time.
+      ```bash
+      kubectl get pods --output=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+      ```
+
+    Test the egress gateway selecting a namespace instead of a pod this time.
+
+    Create the namespace  `app-test`.
 
     ```bash
-    #create a ns
     kubectl create ns app-test
     ```
 
-    a. Test without using the egress-gw
+    - **I.** First test the test host from a pod in the `app-test` namespace without using the egress gateway.
     
        Create a pod and test
        

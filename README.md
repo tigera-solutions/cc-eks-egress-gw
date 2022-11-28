@@ -524,7 +524,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     sudo tcpdump -v -ni eth0 tcp port 7777 
     ```
 
-16. Create a pod for testing
+16. Testing egress gateway for a **POD**. 
 
     Open another terminal and load the environment variables:
 
@@ -609,7 +609,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       ```bash
       kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
       ```
-17. Create another egress gateway
+
+17. Testing egress gateway for a **NAMESPACE**
+
+    Create another egress gateway
 
     a. Create an IP pool for the blue egress gw
     

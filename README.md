@@ -84,9 +84,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
    
    ![egress-gateway-Page-2](https://user-images.githubusercontent.com/104035488/204168127-978e4f60-c83d-4d52-bcae-4b8db4468bf9.png)
-
+<!--
    ![eks-cloudformation-vpc](https://user-images.githubusercontent.com/104035488/204159993-da381eb6-3ad7-4001-8245-b12244806792.png)
-
+-->
    As we will use Calico CNI, let's create subnets for the default ippool. Also, lets create subnets to be used for the egress gateway.
    
    The final ip subnet distribution will look like:

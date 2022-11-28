@@ -253,7 +253,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    Connect the EKS cluster to [Calico Cloud](https://www.calicocloud.io/).
    If you don't have a Calico Cloud account, you can sign up for a free 14-day trial and get access to it immediately.
 
-## Egress gateway installation and configuration.
+## Egress gateway creation and configuration.
 
    > **Note**: The steps explained here are oriented to this practical exercise of creating and using a calico cloud egress gateway in your EKS cluster. If you are interested in learning more about the theory behind the following steps, please refer to the [Calico Cloud documentation](https://docs.calicocloud.io/networking/egress/egress-gateway-aws).
 

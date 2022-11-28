@@ -433,7 +433,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 15. Create a test host to see the details of the packets received outside the EKS cluster.
 
-    Retrieve the `subnet-id` of the public subnet created by the EKS to be used in your test host.
+    Retrieve the `subnet-id` of the public subnet with cidr block `192.168.0.0/25` created by the EKS to be used in your test host.
     
     ```bash
     HOSTSUBNETID=$(aws ec2 describe-subnets \

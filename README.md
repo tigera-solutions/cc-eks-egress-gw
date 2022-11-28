@@ -86,7 +86,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    ![egress-gateway-Page-2](https://user-images.githubusercontent.com/104035488/204168127-978e4f60-c83d-4d52-bcae-4b8db4468bf9.png)
 
-   As we will use Calico CNI, let's create subnets for its default ippool. Also, let's define subnets to be used for the egress gateway.
+   As we will use Calico CNI, let's create subnets for its default `IPPool`. Also, let's define subnets to be used for the egress gateway.
    
    The final subnet segmentation of the VPC IP address `192.168.0.0/22` will look like:
 
@@ -97,10 +97,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    | 192.168.0.128/25 | 192.168.0.128 -255  | EKS public subnet in AZ2                    |
    | 192.168.1.0/25   | 192.168.1.0 - 127   | EKS private subnet in AZ1                   |
    | 192.168.1.128/25 | 192.168.1.128 - 255 | EKS private subnet in AZ2                   |
-   | 192.168.2.0/25   | 192.168.2.0 - 127   | Calico default IPPOOL private subnet in AZ1 |
-   | 192.168.2.128/25 | 192.168.2.128 - 255 | Calico default IPPOOL private subnet in AZ2 |
-   | 192.168.3.0/25   | 192.168.3.0 - 127   | Egress gateway IPPOOL private subnet in AZ1 |
-   | 192.168.3.128/25 | 192.168.3.128 - 255 | Egress gateway IPPOOL private subnet in AZ2 |
+   | 192.168.2.0/25   | 192.168.2.0 - 127   | Calico default IPPool private subnet in AZ1 |
+   | 192.168.2.128/25 | 192.168.2.128 - 255 | Calico default IPPool private subnet in AZ2 |
+   | 192.168.3.0/25   | 192.168.3.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
+   | 192.168.3.128/25 | 192.168.3.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
    </pre>
 
    To create the new subnets we need to retrieve the `VPC id` from the VPC created by EKS.
@@ -302,7 +302,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     kubectl describe node `kubectl get nodes -o=jsonpath='{.items[0].metadata.name}'` | grep aws-secondary
     ```
 
-12. Create the IPPOOLS to be used by the second ENI on the nodes and by the egress gateway.
+12. Create the `IPPool's` to be used by the second ENI on the nodes and by the egress gateway.
 
     ```yaml
     kubectl create -f - <<EOF
@@ -354,13 +354,13 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     EOF
     ```
 
-    Check the ippools creation
+    Check the `IPPool's` creation
 
     ```bash
     kubectl get ippools -o wide
     ```
 
-13. Copy the pull secret from calico-system namespace to the default namespace to authorize the download of the egress gateway image.
+13. Copy the pull secret from `calico-system` namespace to the `default` namespace to authorize the download of the egress gateway image.
 
     ```bash
     kubectl get secret tigera-pull-secret --namespace=calico-system -o yaml | \
@@ -368,7 +368,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
        kubectl apply --namespace=default -f -
     ```
 
-14. Create the egress gateway `red` in the default namespace.
+14. Create the egress gateway `red` in the `default` namespace.
 
     ```yaml
     kubectl apply -f - <<EOF
@@ -431,10 +431,11 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     ![egress-gateway-Egress Gateway created](https://user-images.githubusercontent.com/104035488/204313504-6f2b61ed-2b66-4ed0-ab29-d057afc61504.png)
 
-15. Create a test host to see the packets details from outside the eks cluster.
+15. Create a test host to see the packets details from outside the EKS cluster.
 
+    Retrieve the `subnet-id` of the public subnet created by the EKS to be used in your test host.
+    
     ```bash
-    # get the subnet id of the host az1 subnet
     HOSTSUBNETID=$(aws ec2 describe-subnets \
         --filters "Name=cidrBlock,Values=192.168.0.0/25" \
         --query 'Subnets[0].SubnetId' \
@@ -443,7 +444,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     echo export HOSTSUBNETID=$HOSTSUBNETID >> ~/egwLabVars.env
     ```
     
-    Create a segurity group
+    Create a segurity group for the test host opening the ports 22 for ssh connection and 7777 to receive test traffic.
 
     ```bash
     aws ec2 create-security-group \
@@ -456,7 +457,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     echo export HOSTSGID=$HOSTSGID >> ~/egwLabVars.env
     ```
     
-    Open a port for ssh access
+    Open the port 22 for ssh access.
 
     ```bash
     aws ec2 authorize-security-group-ingress \
@@ -467,7 +468,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --no-cli-pager
     ```
     
-    Open a port for testing egress gw
+    Open a port 7777 for testing traffic.
 
     ```bash
     aws ec2 authorize-security-group-ingress \

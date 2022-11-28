@@ -497,7 +497,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
     
-    Once the test host is create, you should have the following in your AWS infrastructure:
+    Once the test host is create, you should have the following picture of your AWS infrastructure:
 
     ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
 

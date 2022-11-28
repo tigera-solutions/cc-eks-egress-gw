@@ -501,7 +501,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
 
-    Retrive the host ip address, so you can ssh into it.
+    Retrive the test host ip address, so you can ssh into it.
 
     ```bash
     HOSTIPADDRESS=$(aws ec2 describe-instances \
@@ -518,7 +518,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ssh -i ~/.ssh/$KEYPAIRNAME.pem ec2-user@$HOSTIPADDRESS
     ```
 
-    Run tcpdump on the test host so you can observe the packets header.
+    Run `tcpdump` on the test host to capture traffic on port 7777, so you can observe the incoming packets and their parameters.
     
     ```bash
     sudo tcpdump -v -ni eth0 tcp port 7777 
@@ -532,7 +532,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     source ~/egwLabVars.env
     ```
 
-    Get the pvt ip from the test host:
+    Retrive the private IP address of the test host.
 
     ```bash
     HOSTPVTIPADDR=$(aws ec2 describe-instances \
@@ -544,7 +544,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
     ```
    
-    Create the a pod named netshoot-default in the default namespace.
+    Create a pod named `netshoot-default` in the `default` namespace.
 
     ```yaml
     kubectl create -f - <<EOF

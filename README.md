@@ -104,16 +104,16 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    </pre>
 
    <pre>
-   | Subnet address   |  Range of addresses           | Description                                 | 
-   | ---------------- | ----------------------------- | ------------------------------------------- |
-   | 192.168.0.0/25   | 192.168.0.0 - 192.168.0.127   | EKS public subnet in AZ1                    |
-   | 192.168.0.128/25 | 192.168.0.128 - 192.168.0.255 | EKS public subnet in AZ2                    |
-   | 192.168.1.0/25   | 192.168.1.0 - 192.168.1.127   | EKS private subnet in AZ1                   |
-   | 192.168.1.128/25 | 192.168.1.128 - 192.168.1.255 | EKS private subnet in AZ2                   |
-   | 192.168.2.0/25   | 192.168.2.0 - 192.168.2.127   | Calico default IPPOOL private subnet in AZ1 |
-   | 192.168.2.128/25 | 192.168.2.128 - 192.168.2.255 | Calico default IPPOOL private subnet in AZ2 |
-   | 192.168.3.0/25   | 192.168.3.0 - 192.168.3.127   | Egress gateway IPPOOL private subnet in AZ1 |
-   | 192.168.3.128/25 | 192.168.3.128 - 192.168.3.255 | Egress gateway IPPOOL private subnet in AZ2 |
+   | Subnet address   |  Range of addresses | Description                                 | 
+   | ---------------- | ------------------- | ------------------------------------------- |
+   | 192.168.0.0/25   | 192.168.0.0 - 127   | EKS public subnet in AZ1                    |
+   | 192.168.0.128/25 | 192.168.0.128 -255  | EKS public subnet in AZ2                    |
+   | 192.168.1.0/25   | 192.168.1.0 - 127   | EKS private subnet in AZ1                   |
+   | 192.168.1.128/25 | 192.168.1.128 - 255 | EKS private subnet in AZ2                   |
+   | 192.168.2.0/25   | 192.168.2.0 - 127   | Calico default IPPOOL private subnet in AZ1 |
+   | 192.168.2.128/25 | 192.168.2.128 - 255 | Calico default IPPOOL private subnet in AZ2 |
+   | 192.168.3.0/25   | 192.168.3.0 - 127   | Egress gateway IPPOOL private subnet in AZ1 |
+   | 192.168.3.128/25 | 192.168.3.128 - 255 | Egress gateway IPPOOL private subnet in AZ2 |
    </pre>
 
    <pre>

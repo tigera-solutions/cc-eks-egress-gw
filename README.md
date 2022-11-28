@@ -217,7 +217,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      EOF
      ```
 
-7. Create the nodegroup and the nodes. For this workshop we will create only two nodes, which are enough to demonstrate the concept.
+6. Create the nodegroup and the nodes. For this workshop we will create only two nodes, which are enough to demonstrate the concept.
 
    ```bash
    eksctl create nodegroup $CLUSTERNAME-ng \
@@ -236,7 +236,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
    ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168680-aed5ccbf-6470-4352-a26d-6fec906673de.png)
  
-8. Install the EBS driver for the EKS cluster
+7. Install the EBS driver for the EKS cluster
 
    ```bash
    # install EBS driver
@@ -248,30 +248,35 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    kubectl get pods -n kube-system | grep -i ebs-csi
    ```
 
-9. Connect to Calico Cloud.
+8. Connect your cluster to Calico Cloud.
 
-   Connect your EKS cluster to [Calico Cloud](https://www.calicocloud.io/)
+   Connect the EKS cluster to [Calico Cloud](https://www.calicocloud.io/).
+   If you don't have a Calico Cloud account, you can sign up for a free 14-day trial and get access to it immediately.
 
-10. Create the IP reservations for the AWS reserved ips
+## Egress gateway installation and configuration.
 
-    ```yaml
-    kubectl create -f - <<EOF
-    apiVersion: projectcalico.org/v3
-    kind: IPReservation
-    metadata:
-      name: aws-ip-reservations
-    spec:
-      reservedCIDRs:
-      - 192.168.2.0/30
-      - 192.168.2.127
-      - 192.168.2.128/30
-      - 192.168.2.255
-      - 192.168.3.0/30
-      - 192.168.3.127
-      - 192.168.3.128/30
-      - 192.168.3.255
-    EOF
-    ```
+   > **Note**: The steps explained here are oriented to this practical exercise of creating and using a calico cloud egress gateway in your EKS cluster. If you are interested in learning more about the theory behind the following steps, please refer to the [Calico Cloud documentation](https://docs.calicocloud.io/networking/egress/egress-gateway-aws).
+
+   Create the `IPReservation` for the AWS reserved IPs. This will avoid the Calico IPAM to allocate those IPs reserved by AWS to workloads.
+
+   ```yaml
+   kubectl create -f - <<EOF
+   apiVersion: projectcalico.org/v3
+   kind: IPReservation
+   metadata:
+     name: aws-ip-reservations
+   spec:
+     reservedCIDRs:
+     - 192.168.2.0/30
+     - 192.168.2.127
+     - 192.168.2.128/30
+     - 192.168.2.255
+     - 192.168.3.0/30
+     - 192.168.3.127
+     - 192.168.3.128/30
+     - 192.168.3.255
+   EOF
+   ```
 
 11. Enable the support for the egress gateway per pod and per namespace. 
 

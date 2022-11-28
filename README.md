@@ -747,7 +747,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       EOF
       ```
 
-    - **I.** First create test traffic to the test host from a pod in the `app-test` namespace without using the egress gateway.
+    - **I.** First create test traffic to the test host from the pod `netshoot-app-test` in the `app-test` namespace without using the egress gateway.
 
       From the second terminal, execute the shell in the pod `netshoot-app-test`.
 

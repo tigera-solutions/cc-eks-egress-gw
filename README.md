@@ -411,12 +411,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
     ```
     
     ![egress-gateway](https://user-images.githubusercontent.com/104035488/204167528-28b5fdb6-4192-412a-a735-f82561c1493b.png)
-
  
- 
-    ![egress-gateway](https://user-images.githubusercontent.com/104035488/204161797-53e5457f-824c-4f15-8067-4911710afc78.png)
-
-
 16. Create a test host to see the packets details from outside the eks cluster.
 
     ```bash

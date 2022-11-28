@@ -221,7 +221,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
      --ssh-access \
      --ssh-public-key $KEYPAIRNAME
    ```
-
+ 
+ ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168680-aed5ccbf-6470-4352-a26d-6fec906673de.png)
+ 
 8. Install the EBS driver for the EKS cluster
 
    ```bash
@@ -233,7 +235,6 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    # check driver pods status
    kubectl get pods -n kube-system | grep -i ebs-csi
    ```
-   ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168153-7a58c266-6b2c-47fb-97d4-0e9d50ff7190.png)
 
 9. Connect to Calico Cloud.
 

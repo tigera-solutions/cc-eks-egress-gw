@@ -90,6 +90,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    The final subnet segmentation of the VPC IP address `192.168.0.0/22` will look like:
    
+   <pre>
    | Subnet address     |  Range of addresses             | # of Hosts | Description                                 | 
    | ------------------ | ------------------------------- | :--------: | ------------------------------------------- |
    | 192.168.0.0/25	   | 192.168.0.0 - 192.168.0.127	    | 126        | EKS public subnet in AZ1			            |
@@ -100,6 +101,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    | 192.168.2.128/25	| 192.168.2.128 - 192.168.2.255	 | 126        | Calico default IPPOOL private subnet in AZ2 |
    | 192.168.3.0/25	   | 192.168.3.0 - 192.168.3.127	    | 126        | Egress gateway IPPOOL private subnet in AZ1	|
    | 192.168.3.128/25	| 192.168.3.128 - 192.168.3.255	 | 126        | Egress gateway IPPOOL private subnet in AZ2 |
+   </pre>
 
    <pre>
    192.168.0.0/25        eks-pub-1a \

@@ -172,47 +172,52 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 5. Uninstall the AWS VPC CNI and install Calico CNI**
    
-   Uninstall AWS VPN CNI
+   To install Calico CNI we need first remove the AWS VPC CNI and then install it.
+   For further information about Calico CNI installation on AWS EKS, please refer to the [Project Calico documentation](https://projectcalico.docs.tigera.io/getting-started/kubernetes/managed-public-cloud/eks)
 
-   ```bash
-   kubectl delete daemonset -n kube-system aws-node
-   ```
+   **Steps**
+   
+   - Uninstall AWS VPN CNI
 
-   Install Calico cni
+     ```bash
+     kubectl delete daemonset -n kube-system aws-node
+     ```
+
+   - Install Calico CNI
  
-   ```bash
-   kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
-   ```
+     ```bash
+     kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+     ```
 
-6. Create the installation configuration.
+   - Create the installation configuration.
 
-   ```yaml
-   kubectl create -f - <<EOF
-   kind: Installation
-   apiVersion: operator.tigera.io/v1
-   metadata:
-     name: default
-   spec:
-     kubernetesProvider: EKS
-     cni:
-       type: Calico
-     calicoNetwork:
-       bgp: Disabled
-       hostPorts: Enabled
-       ipPools:
-       - blockSize: 28
-         cidr: 192.168.2.0/24
-         encapsulation: VXLAN
-         natOutgoing: Enabled
-         nodeSelector: all()
-       linuxDataplane: Iptables
-       multiInterfaceMode: None
-       nodeAddressAutodetectionV4:
-         canReach: 8.8.8.8
-   EOF
-   ```
+     ```yaml
+     kubectl create -f - <<EOF
+     kind: Installation
+     apiVersion: operator.tigera.io/v1
+     metadata:
+       name: default
+     spec:
+       kubernetesProvider: EKS
+       cni:
+         type: Calico
+       calicoNetwork:
+         bgp: Disabled
+         hostPorts: Enabled
+         ipPools:
+         - blockSize: 28
+           cidr: 192.168.2.0/24
+           encapsulation: VXLAN
+           natOutgoing: Enabled
+           nodeSelector: all()
+         linuxDataplane: Iptables
+         multiInterfaceMode: None
+         nodeAddressAutodetectionV4:
+           canReach: 8.8.8.8
+     EOF
+     ```
 
-7. Create the nodegroup and the nodes
+7. Create the nodegroup and the nodes. For this workshop we will create only two nodes, which are enough to demonstrate the concept.
 
    ```bash
    eksctl create nodegroup $CLUSTERNAME-ng \
@@ -226,8 +231,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --ssh-access \
      --ssh-public-key $KEYPAIRNAME
    ```
- 
- ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168680-aed5ccbf-6470-4352-a26d-6fec906673de.png)
+   
+   After the node group and the nodes creation, the AWS resources should look like the following diagram:
+
+   ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168680-aed5ccbf-6470-4352-a26d-6fec906673de.png)
  
 8. Install the EBS driver for the EKS cluster
 

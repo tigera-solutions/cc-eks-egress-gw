@@ -1,13 +1,13 @@
 # Calico Cloud Egress Gateway on an EKS Cluster 
 
-This repo intents to guide you step-by-step on the process of creating a EKS cluster, install Calico OSS, register on Calico Cloud and create an egress gateway for your applications to leave the cluster with an specific IP address different from the node IP address.
+This repo intends to guide you step-by-step on creating an EKS cluster, installing Calico OSS, registering the cluster on Calico Cloud and creating an egress gateway for your applications to leave the Kubernetes cluster with a different IP address than the nodes.
 
 ## Instructions
 
-> NOTE: In the following sections we'll be generating and setting some environment variables. If you're terminal session restarts you may need to reset these variables. You can use that via the following command: <p>
+> **Note**: During this workshop, we'll set up some environment variables. If you're terminal session restarts, you may need to reset these variables. You can use that via the following command: <p>
 `source ~/egwLabVars.env`
 
-1. Define the variables:
+1. Define the initial environment variables for your EKS cluster:
 
    ```bash
    export CLUSTERNAME=rmart-egw
@@ -17,8 +17,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    export KEYPAIRNAME=rmart-egw-key
    ```
 
+   Persist for Later Sessions in Case of Timeout
+   
    ```bash
-   # Persist for Later Sessions in Case of Timeout
    echo "# Start Egress Gateway Lab Params" > ~/egwLabVars.env
    echo export CLUSTERNAME=$CLUSTERNAME >> ~/egwLabVars.env
    echo export REGION=$REGION >> ~/egwLabVars.env
@@ -27,7 +28,7 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
    echo export KEYPAIRNAME=$KEYPAIRNAME >> ~/egwLabVars.env
    ```
 
-2. Create a keypair if you don't have one or don't want to reuse any.
+2. Create a keypair if you don't have one or don't want to reuse any. Otherwise, just make sure that the KEYPAIRNAME environment variable is set with the name of your existing key pair.
 
    ```bash
    aws ec2 create-key-pair \
@@ -47,9 +48,9 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 
    The expect output is:
 
-   ```bash
+   <pre>
    -r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
-   ```
+   </pre>
 
 3. Create an EKS cluster with no node group.
 

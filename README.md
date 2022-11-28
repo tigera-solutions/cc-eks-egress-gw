@@ -789,21 +789,27 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
         
         Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
              
-      You can stop the pod of using the egress gateway by removing the annotation previously done.
+        You can stop the pod of using the egress gateway by removing the annotation previously done.
+  
+        ```bash
+        kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
+        ```
 
-      ```bash
-      kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
-      ```
-
-      - **III.** Create another pod in the test namespace and test it again
+      - **III.** Create another pod in the `app-test` namespace and repeat the tests.
         
         ```bash
         kubectl run -it --rm -n app-test another-pod --env="HOSTPVTIPADDR=$HOSTPVTIPADDR" --image nicolaka/netshoot:latest
         ```  
+        
+        Run the following `netcat` command and observer the packets arriving at the test host.
+
         ```bash
-        #test again
         nc -zv $HOSTPVTIPADDR 7777
         ```
+
+        **Note that you did not need to annotated any pod. This is because the namespace has the annotations on it. So, any pod created inside the namespace will automatically use the egress gateway for egress traffic.** 
+
+---
 
 ## Cleaning up the environment
 
@@ -870,7 +876,3 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    ```bash
    rm ~/egwLabVars.env
    ```
-
------
-
-## Congratulations you finished it!

@@ -89,19 +89,6 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    As we will use Calico CNI, let's create subnets for its default ippool. Also, let's define subnets to be used for the egress gateway.
    
    The final subnet segmentation of the VPC IP address `192.168.0.0/22` will look like:
-   
-   <pre>
-   | Subnet address     |  Range of addresses             | # of Hosts | Description                                 | 
-   | ------------------ | ------------------------------- | :--------: | ------------------------------------------- |
-   | 192.168.0.0/25	   | 192.168.0.0 - 192.168.0.127	    | 126        | EKS public subnet in AZ1			            |
-   | 192.168.0.128/25	| 192.168.0.128 - 192.168.0.255	 | 126        | EKS public subnet in AZ2                    |
-   | 192.168.1.0/25   	| 192.168.1.0 - 192.168.1.127	    | 126        | EKS private subnet in AZ1                   |
-   | 192.168.1.128/25	| 192.168.1.128 - 192.168.1.255	 | 126        | EKS private subnet in AZ2                   |
-   | 192.168.2.0/25	   | 192.168.2.0 - 192.168.2.127	    | 126        | Calico default IPPOOL private subnet in AZ1	|
-   | 192.168.2.128/25	| 192.168.2.128 - 192.168.2.255	 | 126        | Calico default IPPOOL private subnet in AZ2 |
-   | 192.168.3.0/25	   | 192.168.3.0 - 192.168.3.127	    | 126        | Egress gateway IPPOOL private subnet in AZ1	|
-   | 192.168.3.128/25	| 192.168.3.128 - 192.168.3.255	 | 126        | Egress gateway IPPOOL private subnet in AZ2 |
-   </pre>
 
    <pre>
    | Subnet address   |  Range of addresses | Description                                 | 
@@ -116,29 +103,18 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    | 192.168.3.128/25 | 192.168.3.128 - 255 | Egress gateway IPPOOL private subnet in AZ2 |
    </pre>
 
-   <pre>
-   192.168.0.0/25        eks-pub-1a \
-   192.168.0.128/25      eks-pub-1b | Created by eksctl
-   192.168.1.0/25        eks-pvt-1a | using cloud formation
-   192.168.1.128/25      eks-pvt-1b /
-   192.168.2.0/25        calico-pvt-1a \ Subnet for Calico CNI ippool
-   192.168.2.128/25      calico-pvt-1b /
-   192.168.3.0/25        egw-pvt-1a \ Subnets for the egress gw 
-   192.168.3.128/25      egw-pvt-1b / (secondary ifs and e-gws)
-   </pre>
-
-   To create the new subnets we need to retrieve the VPC id from the VPC created by EKS.
+   To create the new subnets we need to retrieve the `VPC id` from the VPC created by EKS.
 
    ```bash
    VPCID=$(aws eks describe-cluster \
              --name $CLUSTERNAME \
              --query 'cluster.resourcesVpcConfig.vpcId' \
              --output text) && echo $VPCID
-   # Persist for Later Sessions in Case of Timeout
+   # Persist for later sessions in case of disconnection.
    echo export VPCID=$VPCID >> ~/egwLabVars.env   
    ```
    
-   Now, create the subnets:
+   Now, create the subnets in the EKS VPC.
 
    ```bash
    aws ec2 create-subnet \
@@ -182,7 +158,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    ```
    
    ```bash
-   # Persist for Later Sessions in Case of Timeout
+   # Persist for later sessions in case of disconnection.
    echo export SUBNETIDCALICO1A=$SUBNETIDCALICO1A >> ~/egwLabVars.env
    echo export SUBNETIDCALICO1B=$SUBNETIDCALICO1B >> ~/egwLabVars.env
    echo export SUBNETIDEGW1A=$SUBNETIDEGW1A >> ~/egwLabVars.env
@@ -446,7 +422,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
         --filters "Name=cidrBlock,Values=192.168.0.0/25" \
         --query 'Subnets[0].SubnetId' \
         --output text) && export HOSTSUBNETID
-    # Persist for Later Sessions in Case of Timeout
+    # Persist for later sessions in case of disconnection.
     echo export HOSTSUBNETID=$HOSTSUBNETID >> ~/egwLabVars.env
     ```
     
@@ -459,7 +435,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --vpc-id $VPCID \
       --output yaml | export HOSTSGID=$(awk '{print $2}') \
       && echo $HOSTSGID
-    # Persist for Later Sessions in Case of Timeout
+    # Persist for later sessions in case of disconnection.
     echo export HOSTSGID=$HOSTSGID >> ~/egwLabVars.env
     ```
     
@@ -499,7 +475,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
       --output yaml \
         | export HOSTINSTANCEID=$(grep InstanceId | awk '{print $2}')
-    # Persist for Later Sessions in Case of Timeout
+    # Persist for later sessions in case of disconnection.
     echo export HOSTINSTANCEID=$HOSTINSTANCEID >> ~/egwLabVars.env
     ```
     
@@ -512,7 +488,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --instance-ids $HOSTINSTANCEID \
       --query "Reservations[*].Instances[*].PublicIpAddress" \
       --output text) && echo $HOSTIPADDRESS
-    # Persist for Later Sessions in Case of Timeout
+    # Persist for later sessions in case of disconnection.
     echo export HOSTIPADDRESS=$HOSTIPADDRESS >> ~/egwLabVars.env
     ```
 
@@ -544,7 +520,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       --query "Reservations[*].Instances[*].PrivateIpAddress" \
       --output text \
       --no-cli-pager)
-    # Persist for Later Sessions in Case of Timeout
+    # Persist for later sessions in case of disconnection.
     echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
     ```
    

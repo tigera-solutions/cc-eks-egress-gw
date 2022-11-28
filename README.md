@@ -804,7 +804,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       You can stop the pod of using the egress gateway by removing the annotation previously done.
   
       ```bash
-      kubectl annotate pods netshoot-default egress.projectcalico.org/selector-
+      kubectl annotate ns app-test egress.projectcalico.org/selector-
       kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector-
       ```
 

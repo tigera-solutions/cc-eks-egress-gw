@@ -777,10 +777,12 @@ This repo intents to guide you step-by-step on the process of creating a EKS clu
 3. Remove the nodegroup 
 
    ```bash
-   aws eks delete-nodegroup \
+   eksctl delete nodegroup \
      --name $CLUSTERNAME-ng \
-     --cluster $CLUSTERNAME \
-     --debug
+     --cluster $CLUSTERNAME \     
+     --region $REGION \
+     --drain false \
+     --disable-eviction
    ```
 
 4. Remove the custom subnets (wait 2-5 min after the nodegroup deletion process has ended.)

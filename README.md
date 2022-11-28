@@ -582,7 +582,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
       Check the test host terminal. The packets captured with tcpdump shows the **node IP address** as source IP for the incomming packet. 
 
-    - II. Test w/ egress-gw
+    - II. Now let's test the acess to the test host using the egress gateway `red`, previouly created.
     
       Open a third terminal and load the environment variables:
       

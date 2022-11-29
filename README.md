@@ -67,7 +67,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    # Persist for later sessions in case of disconnection.
    echo export AZ2=$AZ2 >> ~/egwLabVars.env
    ```
-   
+
    Create the cluster to using only the 2 availability zones mapped in the previous step:
    
    ```bash
@@ -97,10 +97,8 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    | 192.168.0.128/25 | 192.168.0.128 -255  | EKS public subnet in AZ2                    |
    | 192.168.1.0/25   | 192.168.1.0 - 127   | EKS private subnet in AZ1                   |
    | 192.168.1.128/25 | 192.168.1.128 - 255 | EKS private subnet in AZ2                   |
-   | 192.168.2.0/25   | 192.168.2.0 - 127   | Calico default IPPool private subnet in AZ1 |
-   | 192.168.2.128/25 | 192.168.2.128 - 255 | Calico default IPPool private subnet in AZ2 |
-   | 192.168.3.0/25   | 192.168.3.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
-   | 192.168.3.128/25 | 192.168.3.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
+   | 192.168.2.0/25   | 192.168.2.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
+   | 192.168.2.128/25 | 192.168.2.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
    </pre>
 
    To create the new subnets we need to retrieve the `VPC id` from the VPC created by EKS.
@@ -123,33 +121,13 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --availability-zone $AZ1 \
      --query 'Subnet.SubnetId' \
      --output text \
-     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1A\}\] \
-       | export SUBNETIDCALICO1A=$(awk '{print $1}')
-   ```
-   ```bash
-   aws ec2 create-subnet \
-     --vpc-id $VPCID \
-     --cidr 192.168.2.128/25 \
-     --availability-zone $AZ2 \
-     --query 'Subnet.SubnetId' \
-     --output text \
-     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateCALICO1B\}\] \
-       | export SUBNETIDCALICO1B=$(awk '{print $1}')
-   ```
-   ```bash
-   aws ec2 create-subnet \
-     --vpc-id $VPCID \
-     --cidr 192.168.3.0/25 \
-     --availability-zone $AZ1 \
-     --query 'Subnet.SubnetId' \
-     --output text \
      --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1A\}\] \
        | export SUBNETIDEGW1A=$(awk '{print $1}')
    ```
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
-     --cidr 192.168.3.128/25 \
+     --cidr 192.168.2.128/25 \
      --availability-zone $AZ2 \
      --query 'Subnet.SubnetId' \
      --output text \
@@ -159,8 +137,6 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    ```bash
    # Persist for later sessions in case of disconnection.
-   echo export SUBNETIDCALICO1A=$SUBNETIDCALICO1A >> ~/egwLabVars.env
-   echo export SUBNETIDCALICO1B=$SUBNETIDCALICO1B >> ~/egwLabVars.env
    echo export SUBNETIDEGW1A=$SUBNETIDEGW1A >> ~/egwLabVars.env
    echo export SUBNETIDEGW1B=$SUBNETIDEGW1B >> ~/egwLabVars.env
    ```
@@ -203,17 +179,6 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
          type: Calico
        calicoNetwork:
          bgp: Disabled
-         hostPorts: Enabled
-         ipPools:
-         - blockSize: 28
-           cidr: 192.168.2.0/24
-           encapsulation: VXLAN
-           natOutgoing: Enabled
-           nodeSelector: all()
-         linuxDataplane: Iptables
-         multiInterfaceMode: None
-         nodeAddressAutodetectionV4:
-           canReach: 8.8.8.8
      EOF
      ```
 
@@ -267,10 +232,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      name: aws-ip-reservations
    spec:
      reservedCIDRs:
-     - 192.168.1.0/30
-     - 192.168.1.127
-     - 192.168.1.128/30
-     - 192.168.1.255
+     - 192.168.2.0/30
+     - 192.168.2.127
+     - 192.168.2.128/30
+     - 192.168.2.255
    EOF
    ```
 
@@ -307,9 +272,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1a
     spec:
-      cidr: 192.168.1.0/26
+      cidr: 192.168.2.0/26
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: subnet-0ea5e86bb9da707ff
+      awsSubnetID: $SUBNETIDEGW1A
       blockSize: 32
       disableBGPExport: true
     ---
@@ -318,9 +283,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1a
     spec:
-      cidr: 192.168.1.64/31
+      cidr: 192.168.2.64/31
       allowedUses: ["Workload"]
-      awsSubnetID: subnet-0ea5e86bb9da707ff
+      awsSubnetID: $SUBNETIDEGW1A
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true
@@ -330,9 +295,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1b
     spec:
-      cidr: 192.168.1.128/26
+      cidr: 192.168.2.128/26
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: subnet-04231c778d41e5a60
+      awsSubnetID: $SUBNETIDEGW1B
       blockSize: 32
       disableBGPExport: true
     ---
@@ -341,9 +306,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1b
     spec:
-      cidr: 192.168.1.192/31
+      cidr: 192.168.2.192/31
       allowedUses: ["Workload"]
-      awsSubnetID: subnet-04231c778d41e5a60
+      awsSubnetID: $SUBNETIDEGW1B
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true

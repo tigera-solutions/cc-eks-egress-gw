@@ -307,9 +307,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1a
     spec:
-      cidr: 192.168.3.0/26
+      cidr: 192.168.1.0/26
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: $SUBNETIDEGW1A
+      awsSubnetID: subnet-0ea5e86bb9da707ff
       blockSize: 32
       disableBGPExport: true
     ---
@@ -318,9 +318,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1a
     spec:
-      cidr: 192.168.3.64/31
+      cidr: 192.168.1.64/31
       allowedUses: ["Workload"]
-      awsSubnetID: $SUBNETIDEGW1A
+      awsSubnetID: subnet-0ea5e86bb9da707ff
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true
@@ -330,9 +330,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1b
     spec:
-      cidr: 192.168.3.128/26
+      cidr: 192.168.1.128/26
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: $SUBNETIDEGW1B
+      awsSubnetID: subnet-04231c778d41e5a60
       blockSize: 32
       disableBGPExport: true
     ---
@@ -341,9 +341,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1b
     spec:
-      cidr: 192.168.3.192/31
+      cidr: 192.168.1.192/31
       allowedUses: ["Workload"]
-      awsSubnetID: $SUBNETIDEGW1B
+      awsSubnetID: subnet-04231c778d41e5a60
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true

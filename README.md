@@ -267,14 +267,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      name: aws-ip-reservations
    spec:
      reservedCIDRs:
-     - 192.168.2.0/30
-     - 192.168.2.127
-     - 192.168.2.128/30
-     - 192.168.2.255
-     - 192.168.3.0/30
-     - 192.168.3.127
-     - 192.168.3.128/30
-     - 192.168.3.255
+     - 192.168.1.0/30
+     - 192.168.1.127
+     - 192.168.1.128/30
+     - 192.168.1.255
    EOF
    ```
 

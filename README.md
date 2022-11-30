@@ -84,7 +84,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 4. After running the `eksctl create cluster` command, the AWS Cloudformation will create a VPC with two subnets per availability zone that will be used to allocate IPs for the nodes and pods. The subnets created are two public (one per availability zone) and two private (one per availability zone). This is done to allow you to deploy nodes in a public or private subnet according to your needs. By default, the node groups create nodes in the public subnets. 
    
-   ![egress-gateway-Page-2](https://user-images.githubusercontent.com/104035488/204168127-978e4f60-c83d-4d52-bcae-4b8db4468bf9.png)
+   ![egress-gateway-v0 0 1-EKS created subnets](https://user-images.githubusercontent.com/104035488/204883625-05c44b0a-a42f-472a-9306-75d24574f05c.png)
 
    As we will use Calico CNI, let's create subnets for its default `IPPool`. Also, let's define subnets to be used for the egress gateway.
    
@@ -143,7 +143,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    After the custom subnets for Calico and the egress gateway were created the VPC will look like the following diagram: 
 
-   ![egress-gateway-v0 0 1-EKS created subnets](https://user-images.githubusercontent.com/104035488/204859442-0fb5cca9-a041-4be6-bb3b-637acbe08096.png)
+   ![egress-gateway-v0 0 1-Custom Subnets](https://user-images.githubusercontent.com/104035488/204883706-353035aa-2802-499f-95ec-044d52afad4b.png)
 
 5. Uninstall the AWS VPC CNI and install Calico CNI**
    

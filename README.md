@@ -492,14 +492,6 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```bash
     source ~/egwLabVars.env
     ```
-    
-<!--    
-    Update the kubeconfig, if needed.
-
-    ```bash
-    aws eks update-kubeconfig --name $CLUSTERNAME --region $REGION 
-    ```
---> 
 
     Retrive the private IP address of the test host.
 
@@ -565,13 +557,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       ```bash
       source ~/egwLabVars.env
       ```
-<!--      
-      Update the kubeconfig, if needed.
 
-      ```bash
-      aws eks update-kubeconfig --name $CLUSTERNAME --region $REGION 
-      ```
--->
       Annotate the `netshoot-default` pod as following. This will cause the pod to use the egress gateway for egress traffic.
 
       ```bash

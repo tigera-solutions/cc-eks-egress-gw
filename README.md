@@ -76,11 +76,11 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --region $REGION \
      --zones $AZ1,$AZ2 \
      --version $K8SVERSION \
-     --vpc-cidr 192.168.0.0/22 \
+     --vpc-cidr 192.168.0.0/24 \
      --without-nodegroup
    ```
    
-   For this workshop, we will not need many IP addresses, so a `/22` network is enough for demonstrating the concept.
+   For this workshop, we will not need many IP addresses, so a `/24` network is enough for demonstrating the concept.
 
 4. After running the `eksctl create cluster` command, the AWS Cloudformation will create a VPC with two subnets per availability zone that will be used to allocate IPs for the nodes and pods. The subnets created are two public (one per availability zone) and two private (one per availability zone). This is done to allow you to deploy nodes in a public or private subnet according to your needs. By default, the node groups create nodes in the public subnets. 
    
@@ -88,17 +88,17 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
    As we will use Calico CNI, let's create subnets for its default `IPPool`. Also, let's define subnets to be used for the egress gateway.
    
-   The final subnet segmentation of the VPC IP address `192.168.0.0/22` will look like:
+   The final subnet segmentation of the VPC IP address `192.168.0.0/24` will look like:
 
    <pre>
    | Subnet address   |  Range of addresses | Description                                 | 
    | ---------------- | ------------------- | ------------------------------------------- |
-   | 192.168.0.0/25   | 192.168.0.0 - 127   | EKS public subnet in AZ1                    |
-   | 192.168.0.128/25 | 192.168.0.128 -255  | EKS public subnet in AZ2                    |
-   | 192.168.1.0/25   | 192.168.1.0 - 127   | EKS private subnet in AZ1                   |
-   | 192.168.1.128/25 | 192.168.1.128 - 255 | EKS private subnet in AZ2                   |
-   | 192.168.2.0/25   | 192.168.2.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
-   | 192.168.2.128/25 | 192.168.2.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
+   | 192.168.0.0/26   | 192.168.0.0 - 127   | EKS public subnet in AZ1                    |
+   | 192.168.0.128/26 | 192.168.0.128 -255  | EKS public subnet in AZ2                    |
+   | 192.168.1.0/26   | 192.168.1.0 - 127   | EKS private subnet in AZ1                   |
+   | 192.168.1.128/26 | 192.168.1.128 - 255 | EKS private subnet in AZ2                   |
+   | 192.168.2.0/26   | 192.168.2.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
+   | 192.168.2.128/26 | 192.168.2.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
    </pre>
 
    To create the new subnets we need to retrieve the `VPC id` from the VPC created by EKS.
@@ -775,7 +775,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 ## Cleaning up the environment
 
-1. Remove the test host
+1. Remove the test host.
 
    ```bash
    aws ec2 terminate-instances \
@@ -783,7 +783,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --no-cli-pager
    ```
 
-2. Remove the test host sg
+2. Remove the test host security group.
 
    ```bash
    aws ec2 delete-security-group \
@@ -792,31 +792,24 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    ```
    > **Note**: If the command fails, wait a few minutes and try again.
 
-3. Remove the nodegroup 
+3. Scale down the nodegroup .
 
    ```bash
-   eksctl delete nodegroup \
-     --name $CLUSTERNAME-ng \
-     --cluster $CLUSTERNAME \     
-     --region $REGION \
-     --drain false \
-     --disable-eviction
+   eksctl scale nodegroup $CLUSTERNAME-ng \
+     --cluster=$CLUSTERNAME 
+     --nodes=0 
    ```
 
-4. Remove the custom subnets (wait 2-5 min after the nodegroup deletion process has ended.)
+4. Remove the custom subnets (wait 2-5 min after the nodegroup scale down process has ended).
 
    ```bash
    aws ec2 delete-subnet \
-   --subnet-id $SUBNETIDCALICO1A
+     --subnet-id $SUBNETIDEGW1A
    aws ec2 delete-subnet \
-   --subnet-id $SUBNETIDCALICO1B
-   aws ec2 delete-subnet \
-   --subnet-id $SUBNETIDEGW1A
-   aws ec2 delete-subnet \
-   --subnet-id $SUBNETIDEGW1B
+     --subnet-id $SUBNETIDEGW1B
    ```
 
-5. Remove the eks cluster
+5. Remove the eks cluster.
 
    ```bash
    eksctl delete cluster \
@@ -824,7 +817,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      --region $REGION
    ```
 
-6. Remove the keypair, if you created one:
+6. Remove the keypair, if you created one.
 
    ```bash
    aws ec2 delete-key-pair \
@@ -833,7 +826,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    rm -f ~/.ssh/$KEYPAIRNAME.pem
    ```
 
-7. Remove the lab env params file:
+7. Remove the lab env params file.
    
    ```bash
    rm ~/egwLabVars.env

@@ -143,8 +143,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    After the custom subnets for Calico and the egress gateway were created the VPC will look like the following diagram: 
 
-   ![subnets-created](https://user-images.githubusercontent.com/104035488/204161704-b983eec0-358d-4b17-a68c-d5698a795680.png)
-
+   ![egress-gateway-v0 0 1-EKS created subnets](https://user-images.githubusercontent.com/104035488/204859442-0fb5cca9-a041-4be6-bb3b-637acbe08096.png)
 
 5. Uninstall the AWS VPC CNI and install Calico CNI**
    
@@ -199,8 +198,8 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    
    After the node group and the nodes creation, the AWS resources should look like the following diagram:
 
-   ![nodegroup-deployed](https://user-images.githubusercontent.com/104035488/204168680-aed5ccbf-6470-4352-a26d-6fec906673de.png)
- 
+   ![egress-gateway-v0 0 1-NodeGroups](https://user-images.githubusercontent.com/104035488/204859583-b6349c4d-2689-4f13-813e-ef475c439feb.png)
+
 7. Install the EBS driver for the EKS cluster
 
    ```bash
@@ -390,7 +389,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```
     After the egress gateway creation, you will have the following:
 
-    ![egress-gateway-Egress Gateway created](https://user-images.githubusercontent.com/104035488/204313504-6f2b61ed-2b66-4ed0-ab29-d057afc61504.png)
+    ![egress-gateway-v0 0 1-Egress Gateway](https://user-images.githubusercontent.com/104035488/204859792-1a03f49e-7699-4eb8-817f-9267677d4dbe.png)
 
 15. Create a test host to see the details of the packets received outside the EKS cluster.
 
@@ -459,8 +458,8 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     ```
     
     Once the test host is create, you should have the following picture of your AWS infrastructure:
-
-    ![egress-gateway-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204312482-52914dd2-0c91-44a1-ae7e-268eb701ef13.png)
+    
+    ![egress-gateway-v0 0 1-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204860124-b49d3673-9bd6-4a91-81b2-6b85532ccd2f.png)
 
     Retrive the test host ip address, so you can ssh into it.
 

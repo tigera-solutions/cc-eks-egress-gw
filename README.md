@@ -498,7 +498,8 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
     ```bash
     aws eks update-kubeconfig --name $CLUSTERNAME --region $REGION 
--->    ```
+    ```
+--> 
 
     Retrive the private IP address of the test host.
 

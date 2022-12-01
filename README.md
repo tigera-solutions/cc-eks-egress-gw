@@ -74,13 +74,12 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
    eksctl create cluster \
      --name $CLUSTERNAME \
      --region $REGION \
-     --zones $AZ1,$AZ2 \
      --version $K8SVERSION \
-     --vpc-cidr 192.168.0.0/23 \
+     --vpc-public-subnets $SUBNETPUBEKS1AID,$SUBNETPUBEKS1BID \
      --without-nodegroup
    ```
    
-   For this workshop, we will not need many IP addresses, so a `/23` network is enough for demonstrating the concept.
+   For this workshop, we will not need many IP addresses, so a `/25` network is enough for demonstrating the concept.
 
 4. After running the `eksctl create cluster` command, the AWS Cloudformation will create a VPC with two subnets per availability zone that will be used to allocate IPs for the nodes and pods. The subnets created are two public (one per availability zone) and two private (one per availability zone). This is done to allow you to deploy nodes in a public or private subnet according to your needs. By default, the node groups create nodes in the public subnets. 
    
@@ -88,59 +87,18 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
    As we will use Calico CNI, let's create subnets for its default `IPPool`. Also, let's define subnets to be used for the egress gateway.
    
-   The final subnet segmentation of the VPC IP address `192.168.0.0/23` will look like:
+   The final subnet segmentation of the VPC IP address `192.168.0.0/25` will look like:
 
    <pre>
    | Subnet address   |  Range of addresses | Description                                 | 
    | ---------------- | ------------------- | ------------------------------------------- |
-   | 192.168.0.0/26   | 192.168.0.0 - 63    | EKS public subnet in AZ1                    |
-   | 192.168.0.64/26  | 192.168.0.64 - 127  | EKS public subnet in AZ2                    |
-   | 192.168.0.128/26 | 192.168.0.128 - 191 | EKS private subnet in AZ1                   |
-   | 192.168.0.192/26 | 192.168.0.192 - 255 | EKS private subnet in AZ2                   |
-   | 192.168.1.0/25   | 192.168.1.0 - 127   | Egress gateway IPPool private subnet in AZ1 |
-   | 192.168.1.128/25 | 192.168.1.128 - 255 | Egress gateway IPPool private subnet in AZ2 |
-   </pre>
+   | 192.168.0.0/27   | 192.168.0.0 - 31    | EKS public subnet in AZ1                    |
+   | 192.168.0.32/27  | 192.168.0.32 - 63   | EKS public subnet in AZ2                    |
+   | 192.168.0.64/27  | 192.168.0.64 - 95   | Egress gateway IPPool public subnet in AZ1  |
+   | 192.168.0.96/27  | 192.168.0.96 - 127  | Egress gateway IPPool public subnet in AZ2  |
+    </pre>
 
-   To create the new subnets we need to retrieve the `VPC id` from the VPC created by EKS.
-
-   ```bash
-   VPCID=$(aws eks describe-cluster \
-             --name $CLUSTERNAME \
-             --query 'cluster.resourcesVpcConfig.vpcId' \
-             --output text) && echo $VPCID
-   # Persist for later sessions in case of disconnection.
-   echo export VPCID=$VPCID >> ~/egwLabVars.env   
-   ```
-   
-   Now, create the subnets in the EKS VPC.
-
-   ```bash
-   aws ec2 create-subnet \
-     --vpc-id $VPCID \
-     --cidr 192.168.1.0/25 \
-     --availability-zone $AZ1 \
-     --query 'Subnet.SubnetId' \
-     --output text \
-     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1A\}\] \
-       | export SUBNETIDEGW1A=$(awk '{print $1}')
-   ```
-   ```bash
-   aws ec2 create-subnet \
-     --vpc-id $VPCID \
-     --cidr 192.168.1.128/25 \
-     --availability-zone $AZ2 \
-     --query 'Subnet.SubnetId' \
-     --output text \
-     --tag-specifications ResourceType=subnet,Tags=\[\{Key=Name,Value=SubnetPrivateEGW1B\}\] \
-       | export SUBNETIDEGW1B=$(awk '{print $1}')
-   ```
-   
-   ```bash
-   # Persist for later sessions in case of disconnection.
-   echo export SUBNETIDEGW1A=$SUBNETIDEGW1A >> ~/egwLabVars.env
-   echo export SUBNETIDEGW1B=$SUBNETIDEGW1B >> ~/egwLabVars.env
-   ```
-   
+  
    After the custom subnets for Calico and the egress gateway were created the VPC will look like the following diagram: 
 
    ![egress-gateway-v0 0 1-Custom Subnets](https://user-images.githubusercontent.com/104035488/204883706-353035aa-2802-499f-95ec-044d52afad4b.png)

@@ -275,7 +275,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     Check the `IPPool's` creation
 
     ```bash
-    kubectl get ippools -o wide
+    kubectl get ippools -o=custom-columns='NAME:.metadata.name,CIDR:.spec.cidr'
     ```
 
 13. Copy the pull secret from `calico-system` namespace to the `default` namespace to authorize the download of the egress gateway image.

@@ -8,7 +8,7 @@ Controlling the source IP seen when traffic leaves the cluster allows groups of 
 
 ### Time Requirements
 
-The workshop as a whole will take around 75-120 minutes to complete.
+The estimated time to complete this workshop is 75-120 minutes.
 
 ### Target Audience
 

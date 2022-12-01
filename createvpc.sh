@@ -159,5 +159,67 @@ eksctl create nodegroup $CLUSTERNAME-ng \
   --ssh-access \
   --ssh-public-key $KEYPAIRNAME
 
+#########################################################
 
+# Deletion Process
+
+# Delete the test host
+
+aws ec2 terminate-instances \
+  --instance-ids $HOSTINSTANCEID \
+  --no-cli-pager
+
+# Delete the security group
+
+aws ec2 delete-security-group \
+  --group-id $HOSTSGID \
+  --no-cli-pager 
+
+# Delete the cluster (with the nodegroup)
+
+eksctl delete cluster \
+  --name $CLUSTERNAME \
+  --region $REGION
+
+# Detach the Internet Gateway from the VPC
+
+aws ec2 detach-internet-gateway \
+  --internet-gateway-id $INETGWID \
+  --vpc-id $VPCID 
+
+# Delete the Internet Gateway
+
+aws ec2 delete-internet-gateway \
+  --internet-gateway-id $INETGWID
+
+# Delete the Subnets
+
+aws ec2 delete-subnet \
+--subnet-id $SUBNETPUBEKS1AID
+
+aws ec2 delete-subnet \
+--subnet-id $SUBNETPUBEKS1BID
+
+aws ec2 delete-subnet \
+--subnet-id $SUBNETPUBEGW1AID
+
+aws ec2 delete-subnet \
+--subnet-id $SUBNETPUBEGW1BID
+
+# Delete the VPC
+
+aws ec2 delete-vpc \
+  --region $REGION \
+  --vpc-id $VPCID 
+
+# Delete the keypair
+
+aws ec2 delete-key-pair \
+  --key-name $KEYPAIRNAME
+# delete the private key stored locally
+rm -f ~/.ssh/$KEYPAIRNAME.pem
+
+#Remove the lab env params file.
+
+rm ~/egwLabVars.env
 

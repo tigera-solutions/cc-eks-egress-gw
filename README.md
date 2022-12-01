@@ -209,7 +209,7 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
    ```bash
    # check driver pods status
-   kubectl get pods -n kube-system | grep -i ebs-csi
+   kubectl get pods -n kube-system -w | grep -i ebs-csi
    ```
 
 8. Connect your cluster to Calico Cloud.
@@ -231,10 +231,10 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
      name: aws-ip-reservations
    spec:
      reservedCIDRs:
-     - 192.168.1.0/30
-     - 192.168.1.127
-     - 192.168.1.128/30
-     - 192.168.1.255
+     - 192.168.0.64/30
+     - 192.168.0.95
+     - 192.168.0.96/30
+     - 192.168.0.127
    EOF
    ```
 
@@ -271,9 +271,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1a
     spec:
-      cidr: 192.168.1.0/26
+      cidr: 192.168.0.64/28
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: $SUBNETIDEGW1A
+      awsSubnetID: $SUBNETPUBEGW1AID
       blockSize: 32
       disableBGPExport: true
     ---
@@ -282,9 +282,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1a
     spec:
-      cidr: 192.168.1.64/31
+      cidr: 192.168.0.80/31
       allowedUses: ["Workload"]
-      awsSubnetID: $SUBNETIDEGW1A
+      awsSubnetID: $SUBNETPUBEGW1AID
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true
@@ -294,9 +294,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: hosts-1b
     spec:
-      cidr: 192.168.1.128/26
+      cidr: 192.168.0.96/28
       allowedUses: ["HostSecondaryInterface"]
-      awsSubnetID: $SUBNETIDEGW1B
+      awsSubnetID: $SUBNETPUBEGW1BID
       blockSize: 32
       disableBGPExport: true
     ---
@@ -305,9 +305,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     metadata:
       name: egress-red-1b
     spec:
-      cidr: 192.168.1.192/31
+      cidr: 192.168.0.112/31
       allowedUses: ["Workload"]
-      awsSubnetID: $SUBNETIDEGW1B
+      awsSubnetID: $SUBNETPUBEGW1BID
       blockSize: 32
       nodeSelector: "!all()"
       disableBGPExport: true
@@ -393,17 +393,6 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
 
 15. Create a test host to see the details of the packets received outside the EKS cluster.
 
-    Retrieve the `subnet-id` of the public subnet with cidr block `192.168.0.0/25` created by the EKS to be used in your test host.
-    
-    ```bash
-    HOSTSUBNETID=$(aws ec2 describe-subnets \
-        --filters "Name=cidrBlock,Values=192.168.0.0/25" \
-        --query 'Subnets[0].SubnetId' \
-        --output text) && export HOSTSUBNETID
-    # Persist for later sessions in case of disconnection.
-    echo export HOSTSUBNETID=$HOSTSUBNETID >> ~/egwLabVars.env
-    ```
-    
     Create a segurity group for the test host opening the ports 22 for ssh connection and 7777 to receive test traffic.
 
     ```bash
@@ -445,12 +434,12 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
     aws ec2 run-instances \
       --key-name $KEYPAIRNAME \
       --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
-      --subnet-id $HOSTSUBNETID \
+      --subnet-id $SUBNETPUBEKS1AID \
       --security-group-ids $HOSTSGID \
       --associate-public-ip-address \
       --instance-type t3.nano \
       --count 1 \
-      --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=rmart-test-host\}\] \
+      --tag-specifications ResourceType=instance,Tags=\[\{Key=Name,Value=$CLUSTERNAME-test-host\}\] \
       --output yaml \
         | export HOSTINSTANCEID=$(grep InstanceId | awk '{print $2}')
     # Persist for later sessions in case of disconnection.
@@ -590,9 +579,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       metadata:
         name: egress-blue-1a
       spec:
-        cidr: 192.168.3.66/31
+        cidr: 192.168.0.82/31
         allowedUses: ["Workload"]
-        awsSubnetID: $SUBNETIDEGW1A
+        awsSubnetID: $SUBNETPUBEGW1AID
         blockSize: 32
         nodeSelector: "!all()"
         disableBGPExport: true
@@ -602,9 +591,9 @@ This repo intends to guide you step-by-step on creating an EKS cluster, installi
       metadata:
         name: egress-blue-1b
       spec:
-        cidr: 192.168.3.194/31
+        cidr: 192.168.0.114/31
         allowedUses: ["Workload"]
-        awsSubnetID: $SUBNETIDEGW1B
+        awsSubnetID: $SUBNETPUBEGW1BID
         blockSize: 32
         nodeSelector: "!all()"
         disableBGPExport: true

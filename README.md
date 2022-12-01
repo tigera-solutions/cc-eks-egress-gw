@@ -8,7 +8,7 @@ Controlling the source IP seen when traffic leaves the cluster allows groups of 
 
 ### Time Requirements
 
-The workshop as a whole will take around 1 to 1.5 hours to complete.
+The workshop as a whole will take around 75-120 minutes to complete.
 
 ### Target Audience
 
@@ -16,7 +16,7 @@ The workshop as a whole will take around 1 to 1.5 hours to complete.
 - DevSecOps Professional
 - Site Reliability Engineers (SRE)
 - Solutions Architects
-- Anyone interested in Calico :)
+- Anyone interested in Calico Cloud :)
 
 ### Learning Objectives
 

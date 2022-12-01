@@ -50,8 +50,9 @@ In this section we will put in place the AWS infrastructure to deploy the AWS EK
    -r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
    </pre>
 
+---
 
-### Build the network infrastucture by creating a VPC.
+## Build the network infrastucture by creating a VPC.
 
 The diagram below shows all the elements that will be created in this step.
 

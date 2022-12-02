@@ -270,6 +270,19 @@ The diagram below shows all the elements that will be created in this step.
     echo export EIPADDRESS1=$EIPADDRESS1 >> ~/egwLabVars.env
     ```
 
+    ```bash
+    aws ec2 allocate-address \
+      --domain vpc \
+      --no-cli-pager \
+      --output text \
+      | export EIPINFO=$(awk '{print $1, " ", $4}')
+    export EIPALLOCATION2=$(echo $EIPINFO | awk '{print $1}') 
+    export EIPADDRESS2=$(echo $EIPINFO | awk '{print $2}')
+    # Persist for later sessions in case of disconnection.
+    echo export EIPALLOCATION2=$EIPALLOCATION2 >> ~/egwLabVars.env 
+    echo export EIPADDRESS2=$EIPADDRESS2 >> ~/egwLabVars.env
+    ```
+
 I will create a script to automate this tasks the a future version, I promisse. :)
 
 ---

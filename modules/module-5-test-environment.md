@@ -57,15 +57,25 @@ Create a test host to see the details of the packets received outside the EKS cl
     
    ![egress-gateway-v0 0 1-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204860124-b49d3673-9bd6-4a91-81b2-6b85532ccd2f.png)
 
-   Retrive the test host ip address, so you can ssh into it in a future module.
+   Retrive the public and private ip address of the test host, so you can connect to it in a future module.
 
    ```bash
    HOSTIPADDRESS=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
      --query "Reservations[*].Instances[*].PublicIpAddress" \
-     --output text) && echo $HOSTIPADDRESS
+     --output text) && echo $HOSTPUBIPADDR
    # Persist for later sessions in case of disconnection.
-   echo export HOSTIPADDRESS=$HOSTIPADDRESS >> ~/egwLabVars.env
+   echo export HOSTPUBIPADDR=$HOSTPUBIPADDR >> ~/egwLabVars.env
+   ```
+
+   ```bash
+   HOSTPVTIPADDR=$(aws ec2 describe-instances \
+     --instance-ids $HOSTINSTANCEID \
+     --query "Reservations[*].Instances[*].PrivateIpAddress" \
+     --output text \
+     --no-cli-pager)
+   # Persist for later sessions in case of disconnection.
+   echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
    ```
 
 --- 

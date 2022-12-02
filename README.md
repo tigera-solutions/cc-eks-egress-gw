@@ -33,9 +33,9 @@ Module 3 - [Deploy an AWS EKS cluster using Calico CNI](/modules/module-3-deploy
 Module 4 - [Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  
 Module 5 - [Create the test environment](/modules/module-5-test-environment.md)  
 Module 6 - [Enabling egress gateway support](/modules/module-6-egw-support.md)  
-Module 7 - [Deploy an Egress Gateway for a per pod selection](/modules/module-7-egw-perpod.md)  
-Module 8 - [Deploy another Egress Gateway for a per namespace selector](/modules/module-8-egw-pernamespace.md)  
-Module 9 - [Deploy the last Egress Gateway with an AWS elastic IP](/modules/module-9-egw-elastic-ip.md)  
+Module 7 - [Deploy Egress Gateway for a per pod selection](/modules/module-7-egw-perpod.md)  
+Module 8 - [Deploy Egress Gateway for a per namespace selector](/modules/module-8-egw-pernamespace.md)  
+Module 9 - [Deploy Egress Gateway with an AWS elastic IP](/modules/module-9-egw-elastic-ip.md)  
 Module 10 - [Clean up](/modules/module-10-clean-up.md)  
 
 > **Note**: The examples and sample code provided in this workshop are intended to be consumed as instructional content. These will help you understand how Calico Cloud can be configured to build a functional solution. These examples are not intended for use in production environments.

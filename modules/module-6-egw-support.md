@@ -89,7 +89,7 @@
 
 ---
 
-[:arrow_right: Module 7 - Enabling egress gateway support](/modules/module-6-egw-support.md) <br>
+[:arrow_right: Module 7 - Deploy an Egress Gateway for a per pod selection](/modules/module-7-egw-perpod.md) <br>
 
-[:arrow_left: Module 5 - Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  
+[:arrow_left: Module 5 - Create the test environment](/modules/module-5-test-environment.md)   
 [:leftwards_arrow_with_hook: Back to Main](/README.md) 

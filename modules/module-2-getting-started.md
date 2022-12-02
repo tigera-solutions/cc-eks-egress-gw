@@ -255,6 +255,21 @@ The diagram below shows all the elements that will be created in this step.
      --no-cli-pager
    ```
 
+10. Allocate two elastic IP addresses for the egress gateway in module 9.
+
+    ```bash
+    aws ec2 allocate-address \
+      --domain vpc \
+      --no-cli-pager \
+      --output text \
+      | export EIPINFO=$(awk '{print $1 $4}')
+    export EIPALLOCATION1=$(echo $EIPINFO | awk '{print $1}') 
+    export EIPADDRESS1=$(echo $EIPINFO | awk '{print $2}')
+    # Persist for later sessions in case of disconnection.
+    echo export EIPALLOCATION1=$EIPALLOCATION1 >> ~/egwLabVars.env 
+    echo export EIPADDRESS1=$EIPADDRESS1 >> ~/egwLabVars.env
+    ```
+
 I will create a script to automate this tasks the a future version, I promisse. :)
 
 ---

@@ -96,5 +96,6 @@ When you change the cluster, the whole Calico Cloud context will change immediat
 --- 
 
 [:arrow_right: Module 5 - Create the test environment](/modules/module-5-test-environment.md)  <br>
+
 [:arrow_left: Module 3 - Deploy an AWS EKS cluster using Calico CNI](/modules/module-3-deploy-eks.md)  
 [:leftwards_arrow_with_hook: Back to Main](/README.md)  

@@ -259,7 +259,6 @@ I will create a script to automate this tasks the a future version, I promisse. 
 
 ---
 
-[:arrow_right: Module 3 - Deploy an AWS EKS cluster using Calico CNI](/modules/module-3-deploy-eks.md)
-  
+[:arrow_right: Module 3 - Deploy an AWS EKS cluster using Calico CNI](/modules/module-3-deploy-eks.md) <br>
 [:arrow_left: Module 1 - Prerequisites](/modules/module-1-prereq.md)  
 [:leftwards_arrow_with_hook: Back to Main](/README.md)  

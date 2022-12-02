@@ -54,6 +54,5 @@
   
 ---
 
-[:arrow_right: Module 2 - Getting Started](/modules/module-2-getting-started.md)
- 
+[:arrow_right: Module 2 - Getting Started](/modules/module-2-getting-started.md) <br> 
 [:leftwards_arrow_with_hook: Back to Main](/README.md)

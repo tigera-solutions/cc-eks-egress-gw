@@ -71,5 +71,6 @@ Create a test host to see the details of the packets received outside the EKS cl
 --- 
 
 [:arrow_right: Module 6 - Deploy an Egress Gateway for a per pod selection](/modules/module-6-egw-perpod.md) <br>
+
 [:arrow_left: Module 4 - Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  
 [:leftwards_arrow_with_hook: Back to Main](/README.md)  

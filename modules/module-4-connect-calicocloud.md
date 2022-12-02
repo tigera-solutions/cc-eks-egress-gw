@@ -28,9 +28,9 @@ This concludes the Calico Cloud trial account creation. You can log in back at a
 
 3. Run the installation script in your cluster. Script should look similar to this:
     
-    <div style="white-space: pre-wrap; font-family:monospace;">
+    <pre style="white-space: pre-wrap;">
     kubectl apply -f https://installer.calicocloud.io/manifests/cc-operator/latest/deploy.yaml && curl -H "Authorization: Bearer a7c2oex34:00llxrhcq:1ga2cz69d7ug81yjgakpyclv6o3eu8o97kp7t2483lmwajslu47xed94e4ic8ywn" "https://www.calicocloud.io/api/managed-cluster/deploy.yaml" | kubectl apply -f -
-    </div>
+    </pre>
 
     > Output should look similar to:
     <pre>

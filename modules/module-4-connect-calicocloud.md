@@ -33,7 +33,7 @@ This concludes the Calico Cloud trial account creation. You can log in back at a
     ```
 
     > Output should look similar to:
-    ```bash
+    <pre>
     namespace/calico-cloud created
     customresourcedefinition.apiextensions.k8s.io/installers.operator.calicocloud.io created
     serviceaccount/calico-cloud-controller-manager created
@@ -51,7 +51,7 @@ This concludes the Calico Cloud trial account creation. You can log in back at a
     100   355  100   355    0     0    541      0 --:--:-- --:--:-- --:--:--   541
     secret/api-key created
     installer.operator.calicocloud.io/aks-cc-repo created
-    ```
+    </pre>
     
     Joining the cluster to Calico Cloud can take a few minutes. Meanwhile the Calico resources can be monitored until they are all reporting `Available` as `True`
 
@@ -89,8 +89,6 @@ You can switch between clusters by following the steps below:
 
 The "**Cluster**" dropdown button will be always visible accross the Calico Cloud UI, no matter which section you are viewing. You can change the cluster you want to interact with at any moment. 
 When you change the cluster, the whole Calico Cloud context will change immediatelly to reflect the information regarding the current selected cluster.
-
-### Congratulations! You successfully connected your cluster to Calico Cloud and you are now ready to move forward in the next steps of this wokshop.
 
 --- 
 

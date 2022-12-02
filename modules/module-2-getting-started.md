@@ -262,7 +262,7 @@ The diagram below shows all the elements that will be created in this step.
       --domain vpc \
       --no-cli-pager \
       --output text \
-      | export EIPINFO=$(awk '{print $1 $4}')
+      | export EIPINFO=$(awk '{print $1, " ", $4}')
     export EIPALLOCATION1=$(echo $EIPINFO | awk '{print $1}') 
     export EIPADDRESS1=$(echo $EIPINFO | awk '{print $2}')
     # Persist for later sessions in case of disconnection.

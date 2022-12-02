@@ -79,7 +79,7 @@
 
 ---
 
-[:arrow_right: Module 4 - Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  
+[:arrow_right: Module 4 - Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  <br>
 
 
 [:arrow_left: Module 2 - Getting Started](/modules/module-2-getting-started.md)  

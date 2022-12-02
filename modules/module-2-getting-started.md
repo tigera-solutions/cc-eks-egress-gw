@@ -54,9 +54,22 @@ In this section we will put in place the AWS infrastructure to deploy the AWS EK
 
 ## Build the network infrastucture by creating a VPC.
 
+For this workshop, we will not need many IP addresses, so a `/25` network is enough for demonstrating the concept. Let's create `/27` subnets to be used for the EKS to deploy its nodes, and for the egress gateway to bind its interface.
+
+The final subnet segmentation of the VPC IP address `192.168.0.0/25` will look like:
+
+<pre>
+| Subnet address   |  Range of addresses | Description                                 | 
+| ---------------- | ------------------- | ------------------------------------------- |
+| 192.168.0.0/27   | 192.168.0.0 - 31    | EKS public subnet in AZ1                    |
+| 192.168.0.32/27  | 192.168.0.32 - 63   | EKS public subnet in AZ2                    |
+| 192.168.0.64/27  | 192.168.0.64 - 95   | Egress gateway IPPool public subnet in AZ1  |
+| 192.168.0.96/27  | 192.168.0.96 - 127  | Egress gateway IPPool public subnet in AZ2  |
+ </pre>
+
 The diagram below shows all the elements that will be created in this step.
 
-![Network Picture]()
+![egress-gateway-v0 0 1-Custom Subnets](https://user-images.githubusercontent.com/104035488/204883706-353035aa-2802-499f-95ec-044d52afad4b.png)
 
 1. Define the availability zones to ne used   
    

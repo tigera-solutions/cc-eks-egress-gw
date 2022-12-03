@@ -2,7 +2,7 @@
 
 In this section we will put in place the AWS infrastructure to deploy the AWS EKS cluster and the **Calico Cloud Egress Gateway**.
 
-> **Note**: During this workshop, we'll set up some environment variables. If you're terminal session restarts, you may need to reload these variables. You can use that via the following command: <p>
+> **Note**: During this workshop we'll set up some environment variables. If you're terminal session restarts, you may need to reload these variables. You can use that via the following command: <p>
 `source ~/egwLabVars.env`
 
 1. Define the initial environment variables for your EKS cluster:
@@ -54,7 +54,7 @@ In this section we will put in place the AWS infrastructure to deploy the AWS EK
 
 ## Build the network infrastucture by creating a VPC.
 
-For this workshop, we will not need many IP addresses, so a `/25` network is enough for demonstrating the concept. Let's create `/27` subnets to be used for the EKS to deploy its nodes, and for the egress gateway to bind its interface.
+We will not need many IP addresses, so a `/25` network is enough for demonstrating the concept. Let's create `/27` subnets to be used for the EKS to deploy its nodes, and for the egress gateway to bind its interface.
 
 The final subnet segmentation of the VPC IP address `192.168.0.0/25` will look like:
 

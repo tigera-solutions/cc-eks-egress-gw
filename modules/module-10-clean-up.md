@@ -67,7 +67,6 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --allocation-id $EIPALLOCATION2
    ```
 
-
 8. Delete the VPC
    
    ```bash

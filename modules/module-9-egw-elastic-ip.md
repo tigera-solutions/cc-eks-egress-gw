@@ -149,7 +149,7 @@ The response will be some public IP address mapped from AWS to route traffic to 
 1. On the third terminal, create the following annotations to the namespace `app-test`.
 
    ```bash 
-   kubectl annotate pods netshoot-default egress.projectcalico.org/selector="egress-code == 'green'"
+   kubectl annotate pods netshoot-browser egress.projectcalico.org/selector="egress-code == 'green'"
    ```
       
 2. Use the curl command to access the ipconfig.io webserver. The ipconfig.io will respond your HTTP GET with your public IP address.

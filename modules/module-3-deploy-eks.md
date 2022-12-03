@@ -62,8 +62,8 @@
    ```
    
    After the node group and the nodes creation, the AWS resources should look like the following diagram:
-
-   ![egress-gateway-v0 0 1-NodeGroups](https://user-images.githubusercontent.com/104035488/204859583-b6349c4d-2689-4f13-813e-ef475c439feb.png)
+   
+   ![egress-gateway-v0 0 2-NodeGroups](https://user-images.githubusercontent.com/104035488/205450939-96cdf05b-f88d-4e96-8506-633f2cea579b.png)
 
 4. Install the EBS driver for the EKS cluster
 

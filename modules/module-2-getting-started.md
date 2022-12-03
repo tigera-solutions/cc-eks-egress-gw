@@ -283,7 +283,7 @@ The diagram below shows all the elements that will be created in this step.
     echo export EIPADDRESS2=$EIPADDRESS2 >> ~/egwLabVars.env
     ```
 
-I will create a script to automate this tasks the a future version, I promisse. :)
+I will create a script to automate this tasks in a future version, I promisse. :smile_cat:
 
 ---
 

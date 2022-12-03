@@ -69,7 +69,7 @@ The final subnet segmentation of the VPC IP address `192.168.0.0/25` will look l
 
 The diagram below shows all the elements that will be created in this step.
 
-![egress-gateway-v0 0 1-Custom Subnets](https://user-images.githubusercontent.com/104035488/204883706-353035aa-2802-499f-95ec-044d52afad4b.png)
+![egress-gateway-v0 0 2-EKS created subnets](https://user-images.githubusercontent.com/104035488/205449518-64f21aea-3e18-4d4a-a875-413424ecc98c.png)
 
 1. Define the availability zones to ne used   
    

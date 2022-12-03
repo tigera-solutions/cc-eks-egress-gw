@@ -2,9 +2,9 @@
 
 ## Welcome
 
-This repo intends to guide you step-by-step on creating an AWS EKS cluster, installing Calico OSS, registering the cluster on Calico Cloud and creating an egress gateway for your applications to leave the Kubernetes cluster with a different IP address than the nodes or even with a fixed public IP address towards the Internet.
-
 Controlling the source IP seen when traffic leaves the cluster allows groups of pods to be identified by external firewalls, appliances and services (even as the groups are scaled up/down or pods restarted). Calico Cloud controls the source IP by directing traffic through one or more “egress gateway” pods, which change the source IP of the traffic to their own IP. The egress gateways used can be chosen at the pod or namespace scope allowing for flexibility in how the cluster is seen from outside.
+
+This repo intends to guide you step-by-step on creating an AWS EKS cluster, installing Calico OSS, registering the cluster on Calico Cloud and creating an egress gateway for your applications to leave the Kubernetes cluster with a different IP address than the nodes or even with a fixed public IP address towards the Internet.
 
 ### Time Requirements
 
@@ -32,7 +32,7 @@ Module 2 - [Getting Started](/modules/module-2-getting-started.md)
 Module 3 - [Deploy an AWS EKS cluster using Calico CNI](/modules/module-3-deploy-eks.md)  
 Module 4 - [Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md)  
 Module 5 - [Create the test environment](/modules/module-5-test-environment.md)  
-Module 6 - [Enabling egress gateway support](/modules/module-6-egw-support.md)  
+Module 6 - [Enable egress gateway support](/modules/module-6-egw-support.md)  
 Module 7 - [Deploy Egress Gateway for a per pod selection](/modules/module-7-egw-perpod.md)  
 Module 8 - [Deploy Egress Gateway for a per namespace selector](/modules/module-8-egw-pernamespace.md)  
 Module 9 - [Deploy Egress Gateway with an AWS elastic IP](/modules/module-9-egw-elastic-ip.md)  

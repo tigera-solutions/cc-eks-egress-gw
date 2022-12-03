@@ -151,6 +151,8 @@
    kubectl exec -it netshoot-default -- /bin/bash
    ```
 
+   > If you get the message: `error: unable to upgrade connection: container not found ("netshoot")` this is because the pod is not on running state yet. Wait a few seconds and try again.
+
 2. Use `netcat` to create a connection to the test host, on the port 7777. 
      
    ```bash

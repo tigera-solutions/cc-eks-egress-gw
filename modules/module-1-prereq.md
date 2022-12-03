@@ -6,6 +6,9 @@
 
   [Installation instructions](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
   
+   
+  Linux installation:
+  
   ```bash
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
@@ -17,6 +20,8 @@
 
   [Installation instructions](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html)
   
+  Linux installation
+
   ```bash
   curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
   sudo mv /tmp/eksctl /usr/local/bin
@@ -27,6 +32,8 @@
 
   [Installation instructions](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
   
+  Linux installation:
+
   ```bash
   curl -o /tmp/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.7/2022-06-29/bin/linux/amd64/kubectl
   sudo chmod +x /tmp/kubectl
@@ -38,17 +45,11 @@
 
   [Installation instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
+  Linux Amazon/Centos:
+
   ```bash
   sudo yum install git-all -y
   git --version
-  ```
-
-- jq and netcat utilities
-
-  ```bash
-  sudo yum install jq nc -y
-  jq --version
-  nc --version
   ```
   
 ---

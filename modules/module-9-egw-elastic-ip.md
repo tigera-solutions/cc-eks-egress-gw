@@ -58,7 +58,7 @@ Let's create another egress gateway.
        metadata:
          annotations:
            cni.projectcalico.org/ipv4pools: '["egress-green-1a","egress-green-1b"]'
-           cni.projectcalico.org/awsElasticIPs: '["$ELASTICIP1", "$ELASTICIP2"]'
+           cni.projectcalico.org/awsElasticIPs: '["$EIPADDRESS1", "$EIPADDRESS2"]'
          labels:
            egress-code: green
        spec:

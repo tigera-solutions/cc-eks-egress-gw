@@ -57,7 +57,18 @@ This steps my be suffice to clean up all the objects created for this workshop.
    --subnet-id $SUBNETPUBEGW1BID
    ```
 
-7. Delete the VPC
+7. Release the Elastic IP addresses.
+
+   ```bash
+   aws ec2 release-address \
+     --allocation-id $EIPALLOCATION1
+
+   aws ec2 release-address \
+     --allocation-id $EIPALLOCATION2
+   ```
+
+
+8. Delete the VPC
    
    ```bash
    aws ec2 delete-vpc \
@@ -65,23 +76,20 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --vpc-id $VPCID 
    ```
 
-8. Delete the keypair
+9. Delete the keypair
 
    ```bash
    aws ec2 delete-key-pair \
      --key-name $KEYPAIRNAME
    ```
 
-9. Delete the private key and the egwLabVars.env files stored locally
+10. Delete the private key and the egwLabVars.env files stored locally
 
-   ```bash
-   rm -f ~/.ssh/$KEYPAIRNAME.pem
-   # Remove the lab env params file.
-   rm ~/egwLabVars.env
-   ```
-
-:
-
+    ```bash
+    rm -f ~/.ssh/$KEYPAIRNAME.pem
+    # Remove the lab env params file.
+    rm ~/egwLabVars.env
+    ```
 
 ---
 

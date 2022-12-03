@@ -161,7 +161,7 @@
 
 3. Check the test host terminal. The packets captured with tcpdump shows the **node IP address** as source IP for the incomming packet. 
 
-   If you are confused about the IP addresses, you can run the following kubectl command to see the egress gateway and the nodes with their IP addresses.
+   If you are confused about the IP addresses, you can run the following kubectl command in another terminal window to see the egress gateway and the nodes with their IP addresses.
 
    ```bash
    kubectl get nodes -o=custom-columns='NAME:.metadata.name,INTERNAL IPADDR:.status.addresses[?(@.type == "InternalIP")].address'

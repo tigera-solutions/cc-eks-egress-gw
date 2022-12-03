@@ -35,7 +35,7 @@ Let's create another egress gateway.
    Verify the created  `IPPOOL's`
 
    ```bash
-   kubectl get ippools
+   kubectl get ippools -o=custom-columns='NAME:.metadata.name,CIDR:.spec.cidr'
    ```
    
 2. Create the egress gateway `blue`.

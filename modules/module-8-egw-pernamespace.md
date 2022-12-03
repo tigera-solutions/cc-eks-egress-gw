@@ -166,6 +166,13 @@ Create test traffic to the test host from the pod `netshoot-app-test` in the `ap
    nc -zv $HOSTPVTIPADDR 7777
    ```
 
+3. Run the following kubectl command in another terminal window to see the egress gateway and the nodes with their IP addresses.
+
+   ```bash
+   kubectl get nodes -o=custom-columns='NAME:.metadata.name,INTERNAL IPADDR:.status.addresses[?(@.type == "InternalIP")].address'
+   kubectl get pods  -o=custom-columns='NAME:.metadata.name,IP ADDRESS:.status.podIP'
+   ```  
+
 Check the terminal connected to the test host. The packets captured with `tcpdump` shows the **node IP address** as source IP for the incomming packet.
 
 ### Test 2 - Acess to the test host from the netshoot-app-test pod using the `egress-gateway-blue`.

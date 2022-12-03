@@ -1,6 +1,6 @@
 # Deploy an AWS EKS cluster using Calico CNI
 
-1. Create the AWS EKS cluster connected to the two subnets created for it in the previous step:
+1. Create the AWS EKS cluster connected to the two subnets designated for it in the previous step:
    
    ```bash
    eksctl create cluster \

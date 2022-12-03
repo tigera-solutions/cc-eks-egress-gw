@@ -1,6 +1,6 @@
 # Deploy an AWS EKS cluster using Calico CNI
 
-1. Create the AWS EKS cluster connected to the two subnets designated for it in the previous step:
+1. Create the AWS EKS cluster connected to the two subnets designated for it in the previous step.
    
    ```bash
    eksctl create cluster \
@@ -10,7 +10,7 @@
      --vpc-public-subnets $SUBNETPUBEKS1AID,$SUBNETPUBEKS1BID \
      --without-nodegroup
    ```
-2. Uninstall the AWS VPC CNI and install Calico CNI**
+2. Uninstall the AWS VPC CNI and install **Calico CNI**.
    
    To install Calico CNI we need first remove the AWS VPC CNI and then install it.
    For further information about Calico CNI installation on AWS EKS, please refer to the [Project Calico documentation](https://projectcalico.docs.tigera.io/getting-started/kubernetes/managed-public-cloud/eks)

@@ -56,8 +56,8 @@ Create a test host to see the details of the packets received outside the EKS cl
    ```
     
 3. Once the test host is create, you should have the following picture of your AWS infrastructure:
-    
-   ![egress-gateway-v0 0 1-Adding the Test Server](https://user-images.githubusercontent.com/104035488/204860124-b49d3673-9bd6-4a91-81b2-6b85532ccd2f.png)
+
+   ![egress-gateway-v0 0 2-test host](https://user-images.githubusercontent.com/104035488/205452170-92a6fc52-1fcb-44ab-86ca-8d35221cd7e0.png)
 
    Retrive the public and private ip address of the test host, so you can connect to it in a future module.
 

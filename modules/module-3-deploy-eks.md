@@ -46,7 +46,7 @@
      EOF
      ```
 
-3. Create the nodegroup and the nodes. For this workshop we will create only two nodes, which are enough to demonstrate the concept.
+3. Create the nodegroup and the nodes. Two nodes are enough to demonstrate the concept.
 
    ```bash
    eksctl create nodegroup $CLUSTERNAME-ng \

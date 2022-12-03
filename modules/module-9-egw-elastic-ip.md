@@ -165,8 +165,7 @@ The response will be some public IP address mapped from AWS to route traffic to 
 You can stop the pod of using the egress gateway by removing the annotation previously done.
  
 ```bash
-kubectl annotate ns app-test egress.projectcalico.org/selector-
-kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector-
+kubectl annotate pods netshoot-browser egress.projectcalico.org/selector-
 ```
 
 ---

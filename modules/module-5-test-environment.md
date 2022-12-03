@@ -59,7 +59,7 @@ Create a test host to see the details of the packets received outside the EKS cl
 
    ![egress-gateway-v0 0 2-test host](https://user-images.githubusercontent.com/104035488/205452170-92a6fc52-1fcb-44ab-86ca-8d35221cd7e0.png)
 
-   Retrive the public and private ip address of the test host, so you can connect to it in a future module.
+   Retrive the public and private IP addresses of the test host, so you can connect to it in a future module.
 
    ```bash
    HOSTIPADDRESS=$(aws ec2 describe-instances \

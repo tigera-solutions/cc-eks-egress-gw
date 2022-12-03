@@ -6,13 +6,15 @@ Create a test host to see the details of the packets received outside the EKS cl
 
    ```bash
    aws ec2 create-security-group \
-     --group-name rmart-sg-test-host \
+     --group-name $CLUSTERNAME-sg-test-host \
      --description "Security group for the test host" \
+     --vpc-id $VPCID \
+     --output yaml | export HOSTSGID=$(awk '{print $2}') \
      && echo $HOSTSGID
    # Persist for later sessions in case of disconnection.
    echo export HOSTSGID=$HOSTSGID >> ~/egwLabVars.env
    ```
-   
+
    Open the port 22 for ssh access.
 
    ```bash

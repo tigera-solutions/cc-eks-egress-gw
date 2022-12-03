@@ -192,13 +192,6 @@ Check the terminal connected to the test host. The packets captured with `tcpdum
             
 3. Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
            
-You can stop the pod of using the egress gateway by removing the annotation previously done.
- 
-```bash
-kubectl annotate ns app-test egress.projectcalico.org/selector-
-kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector-
-```
-
 ### Test 3 - Create another pod in the `app-test` namespace and repeat the tests.
       
 1. Create `another-pod`:
@@ -212,6 +205,13 @@ kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector-
    ```bash
    nc -zv $HOSTPVTIPADDR 7777
    ```
+
+You can stop the pod of using the egress gateway by removing the annotation previously done.
+ 
+```bash
+kubectl annotate ns app-test egress.projectcalico.org/selector-
+kubectl annotate ns app-test egress.projectcalico.org/namespaceSelector-
+```
 
 **Note that you did not need to annotated any pod. This is because the namespace has the annotations on it. So, any pod created inside the namespace will automatically use the egress gateway for egress traffic.** 
 

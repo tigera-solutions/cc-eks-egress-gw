@@ -155,7 +155,7 @@ The response will be some public IP address mapped from AWS to route traffic to 
 2. Use the curl command to access the ipconfig.io webserver. The ipconfig.io will respond your HTTP GET with your public IP address.
    
    ```bash
-   curl ipcoknfig.io
+   curl ipconfig.io
    ```
 
 The response will be some public IP address mapped from AWS to route traffic to your node. It's ephemeral and can change at any moment.

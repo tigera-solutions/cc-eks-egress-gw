@@ -98,8 +98,7 @@
 
    After the egress gateway creation, you will have the following:
 
-    ![egress-gateway-v0 0 1-Egress Gateway](https://user-images.githubusercontent.com/104035488/204859792-1a03f49e-7699-4eb8-817f-9267677d4dbe.png)
-
+   ![egress-gateway-v0 0 2-egw-red](https://user-images.githubusercontent.com/104035488/205453207-11ed3dd5-b45e-4d51-aefc-9df1d51f9aeb.png)
 
 ## Testing the egress gateway with a the perPod selector.
 

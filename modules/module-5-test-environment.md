@@ -65,9 +65,8 @@ Create a test host to see the details of the packets received outside the EKS cl
    HOSTPUBIPADDR=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
      --query "Reservations[*].Instances[*].PublicIpAddress" \
-     --output text \
-     --no-cli-pager) \
-     | && echo $HOSTPUBIPADDR
+     --output text) \
+     && echo $HOSTPUBIPADDR
    # Persist for later sessions in case of disconnection.
    echo export HOSTPUBIPADDR=$HOSTPUBIPADDR >> ~/egwLabVars.env
    ```
@@ -76,9 +75,8 @@ Create a test host to see the details of the packets received outside the EKS cl
    HOSTPVTIPADDR=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
      --query "Reservations[*].Instances[*].PrivateIpAddress" \
-     --output text \
-     --no-cli-pager) \
-     | echo $HOSTPVTIPADDR
+     --output text) \
+     && echo $HOSTPVTIPADDR
    # Persist for later sessions in case of disconnection.
    echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
    ```

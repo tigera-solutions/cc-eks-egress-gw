@@ -10,20 +10,20 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --no-cli-pager
    ```
 
-2. Delete the security group
-
-   ```bash
-   aws ec2 delete-security-group \
-     --group-id $HOSTSGID \
-     --no-cli-pager 
-   ```
-
-3. Delete the cluster (with the nodegroup)
+2. Delete the cluster (with the nodegroup)
 
    ```bash
    eksctl delete cluster \
      --name $CLUSTERNAME \
      --region $REGION
+   ```
+
+3. Delete the security group
+
+   ```bash
+   aws ec2 delete-security-group \
+     --group-id $HOSTSGID \
+     --no-cli-pager 
    ```
 
 4. Detach the Internet Gateway from the VPC

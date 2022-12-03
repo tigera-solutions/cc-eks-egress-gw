@@ -35,7 +35,7 @@ Let's create another egress gateway.
    Verify the created  `IPPOOL's`
 
    ```bash
-   kubectl get ippools
+   kubectl get ippools -o=custom-columns='NAME:.metadata.name,CIDR:.spec.cidr'
    ```
    
 2. Create the egress gateway `green`. This egress gateway has on its annotation, the IP addresses of the Elastic IPs previously created. Thus the egress gateway will use the Elastic IPs addresses when sending traffic to the Internet.

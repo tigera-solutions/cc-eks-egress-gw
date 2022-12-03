@@ -1,8 +1,6 @@
 # Connect your cluster to Calico Cloud
 
-**Goal:** Connect a cluster to the Calico Cloud management plane.
-
-IMPORTANT: In order to complete this module, you will need to create a [Calico Cloud trial account](https://www.calicocloud.io/). Issues with being unable to navigate menus in the UI are often due to browsers blocking scripts - please ensure that you disabled all blocker scripts.
+> **Notes**: In order to complete this module, you will need to create a [Calico Cloud trial account](https://www.calicocloud.io/). Issues with being unable to navigate menus in the UI are often due to browsers blocking scripts - please ensure that you disabled all blocker scripts.
 
 ## Step 1 - Creating a Calico Cloud trial account
 

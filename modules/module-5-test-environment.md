@@ -62,12 +62,12 @@ Create a test host to see the details of the packets received outside the EKS cl
    Retrive the public and private IP addresses of the test host, so you can connect to it in a future module.
 
    ```bash
-   HOSTIPADDRESS=$(aws ec2 describe-instances \
+   HOSTPUBIPADDR=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
      --query "Reservations[*].Instances[*].PublicIpAddress" \
      --output text \
      --no-cli-pager) \
-     | export HOSTPUBIPADDR=$(awk '{print $1}') && echo $HOSTPUBIPADDR
+     | && echo $HOSTPUBIPADDR
    # Persist for later sessions in case of disconnection.
    echo export HOSTPUBIPADDR=$HOSTPUBIPADDR >> ~/egwLabVars.env
    ```
@@ -78,7 +78,7 @@ Create a test host to see the details of the packets received outside the EKS cl
      --query "Reservations[*].Instances[*].PrivateIpAddress" \
      --output text \
      --no-cli-pager) \
-     | export HOSTPVTIPADDR=$(awk '{print $1}') && echo $HOSTPVTIPADDR
+     | echo $HOSTPVTIPADDR
    # Persist for later sessions in case of disconnection.
    echo export HOSTPVTIPADDR=$HOSTPVTIPADDR >> ~/egwLabVars.env
    ```

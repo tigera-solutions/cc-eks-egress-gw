@@ -136,6 +136,7 @@ The diagram below shows all the elements that will be created in this step.
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
+     --region $REGION \
      --cidr 192.168.0.0/27 \
      --availability-zone $AZ1 \
      --query 'Subnet.SubnetId' \
@@ -149,6 +150,7 @@ The diagram below shows all the elements that will be created in this step.
    ```bash
    aws ec2 create-subnet \
      --vpc-id $VPCID \
+     --region $REGION \
      --cidr 192.168.0.32/27 \
      --availability-zone $AZ2 \
      --query 'Subnet.SubnetId' \
@@ -162,6 +164,7 @@ The diagram below shows all the elements that will be created in this step.
    ```bash   
    aws ec2 create-subnet \
      --vpc-id $VPCID \
+     --region $REGION \
      --cidr 192.168.0.64/27 \
      --availability-zone $AZ1 \
      --query 'Subnet.SubnetId' \
@@ -175,6 +178,7 @@ The diagram below shows all the elements that will be created in this step.
    ```bash   
    aws ec2 create-subnet \
      --vpc-id $VPCID \
+     --region $REGION \
      --cidr 192.168.0.96/27 \
      --availability-zone $AZ2 \
      --query 'Subnet.SubnetId' \

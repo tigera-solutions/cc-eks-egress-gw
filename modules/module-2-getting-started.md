@@ -217,6 +217,7 @@ The diagram below shows all the elements that will be created in this step.
 
    ```bash
    aws ec2 describe-route-tables \
+     --region $REGION \
      --filters "Name=vpc-id,Values=$VPCID" \
      --query 'RouteTables[*].RouteTableId' \
      --output text \
@@ -229,6 +230,7 @@ The diagram below shows all the elements that will be created in this step.
 
    ```bash
    aws ec2 create-route \
+     --region $REGION \
      --route-table-id $RTTABLEID \
      --destination-cidr-block 0.0.0.0/0 \
      --gateway-id $INETGWID \
@@ -239,24 +241,28 @@ The diagram below shows all the elements that will be created in this step.
 
    ```bash
    aws ec2 associate-route-table \
+     --region $REGION \
      --route-table-id $RTTABLEID \
      --subnet-id $SUBNETPUBEKS1AID \
      --output text \
      --no-cli-pager
    
    aws ec2 associate-route-table \
+     --region $REGION \
      --route-table-id $RTTABLEID \
      --subnet-id $SUBNETPUBEKS1BID \
      --output text \
      --no-cli-pager
    
    aws ec2 associate-route-table \
+     --region $REGION \
      --route-table-id $RTTABLEID \
      --subnet-id $SUBNETPUBEGW1AID \
      --output text \
      --no-cli-pager
    
    aws ec2 associate-route-table \
+     --region $REGION \
      --route-table-id $RTTABLEID \
      --subnet-id $SUBNETPUBEGW1BID \
      --output text \
@@ -267,6 +273,7 @@ The diagram below shows all the elements that will be created in this step.
 
     ```bash
     aws ec2 allocate-address \
+      --region $REGION \
       --domain vpc \
       --no-cli-pager \
       --output text \
@@ -280,6 +287,7 @@ The diagram below shows all the elements that will be created in this step.
 
     ```bash
     aws ec2 allocate-address \
+      --region $REGION \
       --domain vpc \
       --no-cli-pager \
       --output text \

@@ -1,4 +1,4 @@
-# Create the test environment
+# Module 5 - Create the test environment
 
 Create a test host to see the details of the packets received outside the EKS cluster.
 
@@ -6,6 +6,7 @@ Create a test host to see the details of the packets received outside the EKS cl
 
    ```bash
    aws ec2 create-security-group \
+     --region $REGION \
      --group-name $CLUSTERNAME-sg-test-host \
      --description "Security group for the test host" \
      --vpc-id $VPCID \

@@ -20,6 +20,7 @@ Create a test host to see the details of the packets received outside the EKS cl
 
    ```bash
    aws ec2 authorize-security-group-ingress \
+     --region $REGION \
      --group-id $HOSTSGID \
      --protocol tcp \
      --port 22 \
@@ -32,6 +33,7 @@ Create a test host to see the details of the packets received outside the EKS cl
    ```bash
    aws ec2 authorize-security-group-ingress \
      --group-id $HOSTSGID \
+     --region $REGION \
      --protocol tcp \
      --port 7777 \
      --cidr 0.0.0.0/0 \
@@ -43,6 +45,7 @@ Create a test host to see the details of the packets received outside the EKS cl
    ```bash
    aws ec2 run-instances \
      --key-name $KEYPAIRNAME \
+     --region $REGION \
      --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
      --subnet-id $SUBNETPUBEKS1AID \
      --security-group-ids $HOSTSGID \
@@ -65,6 +68,7 @@ Create a test host to see the details of the packets received outside the EKS cl
    ```bash
    HOSTPUBIPADDR=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
+     --region $REGION \
      --query "Reservations[*].Instances[*].PublicIpAddress" \
      --output text) \
      && echo $HOSTPUBIPADDR
@@ -75,6 +79,7 @@ Create a test host to see the details of the packets received outside the EKS cl
    ```bash
    HOSTPVTIPADDR=$(aws ec2 describe-instances \
      --instance-ids $HOSTINSTANCEID \
+     --region $REGION \
      --query "Reservations[*].Instances[*].PrivateIpAddress" \
      --output text) \
      && echo $HOSTPVTIPADDR

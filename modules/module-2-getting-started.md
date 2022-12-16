@@ -194,18 +194,22 @@ The diagram below shows all the elements that will be created in this step.
    ```bash
    aws ec2 modify-subnet-attribute \
       --subnet-id $SUBNETPUBEKS1AID \
+      --region $REGION \
       --map-public-ip-on-launch "{\"Value\":true}" 
    
    aws ec2 modify-subnet-attribute \
       --subnet-id $SUBNETPUBEKS1BID \
+      --region $REGION \
       --map-public-ip-on-launch "{\"Value\":true}" 
    
    aws ec2 modify-subnet-attribute \
       --subnet-id $SUBNETPUBEGW1AID \
+      --region $REGION \
       --map-public-ip-on-launch "{\"Value\":true}" 
    
    aws ec2 modify-subnet-attribute \
       --subnet-id $SUBNETPUBEGW1BID \
+      --region $REGION \
       --map-public-ip-on-launch "{\"Value\":true}" 
    ```
 

@@ -45,6 +45,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
 
    ```bash
    aws ec2 detach-internet-gateway \
+     --region $REGION \
      --internet-gateway-id $INETGWID \
      --vpc-id $VPCID 
    ```

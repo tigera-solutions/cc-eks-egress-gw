@@ -23,7 +23,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --policy-arn $TIGERAEGWPOLICYARN
    ```
 
-2. Delete the cluster (with the nodegroup)
+3. Delete the cluster (with the nodegroup)
 
    ```bash
    eksctl delete cluster \
@@ -31,7 +31,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --region $REGION
    ```
 
-3. Delete the security group
+4. Delete the security group
 
    ```bash
    aws ec2 delete-security-group \
@@ -39,7 +39,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --no-cli-pager 
    ```
 
-4. Detach the Internet Gateway from the VPC
+5. Detach the Internet Gateway from the VPC
 
    ```bash
    aws ec2 detach-internet-gateway \
@@ -47,14 +47,14 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --vpc-id $VPCID 
    ```
 
-5. Delete the Internet Gateway
+6. Delete the Internet Gateway
 
    ```bash
    aws ec2 delete-internet-gateway \
      --internet-gateway-id $INETGWID
    ```
 
-6. Delete the Subnets
+7. Delete the Subnets
 
    ```bash
    aws ec2 delete-subnet \
@@ -70,7 +70,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
    --subnet-id $SUBNETPUBEGW1BID
    ```
 
-7. Release the Elastic IP addresses.
+8. Release the Elastic IP addresses.
 
    ```bash
    aws ec2 release-address \
@@ -80,7 +80,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --allocation-id $EIPALLOCATION2
    ```
 
-8. Delete the VPC
+9. Delete the VPC
    
    ```bash
    aws ec2 delete-vpc \
@@ -88,14 +88,14 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --vpc-id $VPCID 
    ```
 
-9. Delete the keypair
+10. Delete the keypair
 
-   ```bash
-   aws ec2 delete-key-pair \
-     --key-name $KEYPAIRNAME
-   ```
+    ```bash
+    aws ec2 delete-key-pair \
+      --key-name $KEYPAIRNAME
+    ```
 
-10. Delete the private key and the egwLabVars.env files stored locally
+11. Delete the private key and the egwLabVars.env files stored locally
 
     ```bash
     rm -f ~/.ssh/$KEYPAIRNAME.pem

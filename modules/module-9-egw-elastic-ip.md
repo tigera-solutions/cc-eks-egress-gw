@@ -158,7 +158,7 @@ The response will be some public IP address mapped from AWS to route traffic to 
    curl ipconfig.io
    ```
 
-The response will be some public IP address mapped from AWS to route traffic to your node. It's ephemeral and can change at any moment.
+The response will be the Elastic IP address allocated to your egress gateway. It's **NOT** ephemeral and will not change unless you release it.
 
 You can stop the pod of using the egress gateway by removing the annotation previously done.
  

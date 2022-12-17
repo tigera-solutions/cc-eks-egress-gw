@@ -25,7 +25,7 @@ The estimated time to complete this workshop is 60-90 minutes.
 
 ## Modules
 
-This workshop is organized in sequencial modules. One module will build up on top of the previous module, so please, follow the order as proposed below.
+This workshop is organized in sequential modules. One module will build up on top of the previous module, so please, follow the order as proposed below.
 
 Module 1 - [Prerequisites](/modules/module-1-prereq.md)  
 Module 2 - [Getting Started](/modules/module-2-getting-started.md)  

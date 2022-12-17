@@ -10,6 +10,19 @@ This steps my be suffice to clean up all the objects created for this workshop.
      --no-cli-pager
    ```
 
+2. Detach the `tigera-egw-policy` policy from the nodegroup's role and delete it.
+
+   ```bash
+   aws iam detach-role-policy \
+     --role-name $NGROLENAME \
+     --policy-arn $TIGERAEGWPOLICYARN
+   ```
+
+   ```bash
+   aws iam delete-policy \
+     --policy-arn $TIGERAEGWPOLICYARN
+   ```
+
 2. Delete the cluster (with the nodegroup)
 
    ```bash

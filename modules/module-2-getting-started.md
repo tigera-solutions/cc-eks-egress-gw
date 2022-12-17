@@ -299,6 +299,20 @@ The diagram below shows all the elements that will be created in this step.
     echo export EIPADDRESS2=$EIPADDRESS2 >> ~/egwLabVars.env
     ```
 
+11. Create the `tigera-egw-policy` for the egress gateway to be allowed to associate and disassociate IP addresses to the ENI. Make sure you are in the repository directory that you just cloned before running this command.
+
+    ```bash
+    aws iam create-policy \
+      --policy-name tigera-egw-policy \
+      --query 'Policy.Arn' \
+      --output text \
+      --no-cli-pager \
+      --policy-document file://scripts/egw-policy.json \
+        | export TIGERAEGWPOLICYARN=$(awk '{print $1}') && echo $TIGERAEGWPOLICYARN
+       # Persist for later sessions in case of disconnection.
+       echo export TIGERAEGWPOLICYARN=$TIGERAEGWPOLICYARN >> ~/egwLabVars.env 
+    ```
+
 I will create a script to automate this tasks in a future version, I promisse. :smile_cat:
 
 ---

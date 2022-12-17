@@ -77,6 +77,31 @@
    kubectl get pods -n kube-system -w | grep -i ebs-csi
    ```
 
+5. Attach the `tigera-egw-policy` to the nodegroup's role.
+
+   - Retrive the nodegroup role name.
+
+     ```bash
+     aws eks describe-nodegroup \
+       --cluster $CLUSTERNAME \
+       --nodegroup-name $CLUSTERNAME-ng \
+       --query 'nodegroup.nodeRole' \
+       --region $REGION \
+       --output text \
+       --no-cli-pager \
+         | export NGROLENAME=$(awk -F "/" '{print $2}') && echo $NGROLENAME
+        # Persist for later sessions in case of disconnection.
+        echo export NGROLENAME=$NGROLENAME >> ~/egwLabVars.env 
+     ```
+
+   - Attach the `tigera-egw-policy` to the nodegroup's role.
+
+     ```bash
+     aws iam attach-role-policy \
+       --role-name $NGROLENAME \
+       --policy-arn $TIGERAEGWPOLICYARN 
+     ```
+
 ---
 
 [:arrow_right: Module 4 - Connect the AWS EKS cluster to Calico Cloud](/modules/module-4-connect-calicocloud.md) <br>

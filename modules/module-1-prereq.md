@@ -1,6 +1,6 @@
 # Prerequisites
 
-**For this workshop you recommend you to install the following tools:**
+1. For this workshop you recommend you to install the following tools:
 
 - AWS CLI upgrade to v2
 
@@ -51,7 +51,14 @@
   sudo yum install git-all -y
   git --version
   ```
-  
+
+2. Clone this repository and change directory to it.
+   
+   ```bash
+   git clone --branch v0.0.2 git@github.com:regismartins/cc-eks-egress-gw.git && \
+   cd cc-eks-egress-gw
+   ```
+
 ---
 
 [:arrow_right: Module 2 - Getting Started](/modules/module-2-getting-started.md) <br> 

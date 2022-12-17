@@ -1,6 +1,6 @@
 # Prerequisites
 
-1. For this workshop you recommend you to install the following tools:
+1. For this workshop we recommend you to install the following tools:
 
 - AWS CLI upgrade to v2
 

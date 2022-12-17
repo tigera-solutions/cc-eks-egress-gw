@@ -20,7 +20,7 @@ The estimated time to complete this workshop is 60-90 minutes.
 
 ### Learning Objectives
 
-1. Learn how to configure the Calico Cloud Egress Gateway on a AWS EKS cluster.
+1. Learn how to configure the Calico Cloud Egress Gateway on an AWS EKS cluster.
 2. Learn the main use cases for Egress Gateway.
 
 ## Modules

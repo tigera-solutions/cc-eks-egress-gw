@@ -7,6 +7,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
    ```bash
    aws ec2 terminate-instances \
      --instance-ids $HOSTINSTANCEID \
+     --region $REGION \
      --no-cli-pager
    ```
 
@@ -36,6 +37,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
    ```bash
    aws ec2 delete-security-group \
      --group-id $HOSTSGID \
+     --region $REGION \
      --no-cli-pager 
    ```
 
@@ -51,32 +53,39 @@ This steps my be suffice to clean up all the objects created for this workshop.
 
    ```bash
    aws ec2 delete-internet-gateway \
-     --internet-gateway-id $INETGWID
+     --internet-gateway-id $INETGWID \
+     --region $REGION
    ```
 
 7. Delete the Subnets
 
    ```bash
    aws ec2 delete-subnet \
-   --subnet-id $SUBNETPUBEKS1AID
+     --region $REGION \
+     --subnet-id $SUBNETPUBEKS1AID
+     
+   aws ec2 delete-subnet \
+     --region $REGION \
+     --subnet-id $SUBNETPUBEKS1BID
    
    aws ec2 delete-subnet \
-   --subnet-id $SUBNETPUBEKS1BID
+     --region $REGION \
+     --subnet-id $SUBNETPUBEGW1AID
    
    aws ec2 delete-subnet \
-   --subnet-id $SUBNETPUBEGW1AID
-   
-   aws ec2 delete-subnet \
-   --subnet-id $SUBNETPUBEGW1BID
+     --region $REGION \
+     --subnet-id $SUBNETPUBEGW1BID
    ```
 
 8. Release the Elastic IP addresses.
 
    ```bash
    aws ec2 release-address \
+     --region $REGION \
      --allocation-id $EIPALLOCATION1
 
    aws ec2 release-address \
+     --region $REGION \
      --allocation-id $EIPALLOCATION2
    ```
 
@@ -92,6 +101,7 @@ This steps my be suffice to clean up all the objects created for this workshop.
 
     ```bash
     aws ec2 delete-key-pair \
+      --region $REGION \
       --key-name $KEYPAIRNAME
     ```
 

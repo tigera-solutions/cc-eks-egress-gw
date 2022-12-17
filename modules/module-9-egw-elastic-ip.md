@@ -159,9 +159,7 @@ The response will be some public IP address mapped from AWS to route traffic to 
    ```
 
 The response will be some public IP address mapped from AWS to route traffic to your node. It's ephemeral and can change at any moment.
-            
-3. Look into the terminal connected to the test host. The packets captured with `tcpdump` shows the egress gateway IP address as source IP for the incoming packets. 
-           
+
 You can stop the pod of using the egress gateway by removing the annotation previously done.
  
 ```bash

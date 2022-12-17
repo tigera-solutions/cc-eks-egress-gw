@@ -1,4 +1,4 @@
-# Enable egress gateway support
+# Module 6 - Enable egress gateway support
 
    > **Note**: The steps explained here are oriented to this practical exercise of creating and using a Calico Cloud egress gateway with an AWS EKS cluster. If you are interested in learning more about the theory behind the following steps, please refer to the [Calico Cloud documentation](https://docs.calicocloud.io/networking/egress/egress-gateway-aws).
 

@@ -1,4 +1,4 @@
-# Connect your cluster to Calico Cloud
+# Module 4 - Connect your cluster to Calico Cloud
 
 > **Note**: In order to complete this module, you will need to create a [Calico Cloud trial account](https://www.calicocloud.io/). Issues with being unable to navigate menus in the UI are often due to browsers blocking scripts - please ensure that you disabled all blocker scripts.
 

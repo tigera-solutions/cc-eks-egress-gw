@@ -1,4 +1,4 @@
-# Deploy Egress Gateway with an AWS elastic IP
+# Module 9 - Deploy Egress Gateway with an AWS elastic IP
 
 Let's create another egress gateway.
 

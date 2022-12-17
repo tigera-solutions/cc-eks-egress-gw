@@ -1,4 +1,4 @@
-# Getting Started
+# Module 2 - Getting Started
 
 In this section we will put in place the AWS infrastructure to deploy the AWS EKS cluster and the **Calico Cloud Egress Gateway**.
 

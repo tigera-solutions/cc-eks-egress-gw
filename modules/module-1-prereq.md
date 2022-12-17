@@ -1,4 +1,4 @@
-# Prerequisites
+# Module 1 - Prerequisites
 
 1. For this workshop we recommend you to install the following tools:
 

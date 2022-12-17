@@ -1,4 +1,4 @@
-# Deploy an AWS EKS cluster using Calico CNI
+# Module 3 - Deploy an AWS EKS cluster using Calico CNI
 
 1. Create the AWS EKS cluster connected to the two subnets designated for it in the previous step.
    

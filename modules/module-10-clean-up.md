@@ -1,4 +1,4 @@
-# Clean up
+# Module 10 - Clean up
 
 This steps my be suffice to clean up all the objects created for this workshop.
 

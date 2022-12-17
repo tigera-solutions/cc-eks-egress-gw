@@ -1,4 +1,4 @@
-# Deploy Egress Gateway for a per namespace selection
+# Module 8 - Deploy Egress Gateway and use a namespace selector
 
 Let's create another egress gateway.
 

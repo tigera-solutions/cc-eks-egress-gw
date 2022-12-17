@@ -1,4 +1,4 @@
-# Deploy Egress Gateway for a per pod selection
+# Module 7 - Deploy Egress Gateway and use a pod selector
 
 1. Create the `IPPool's` to be used by the egress gateway.
 

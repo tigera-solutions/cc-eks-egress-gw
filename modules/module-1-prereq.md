@@ -55,7 +55,8 @@
 2. Clone this repository and change directory to it.
    
    ```bash
-   git clone --branch v0.0.2 git@github.com:regismartins/cc-eks-egress-gw.git && \
+#   git clone --branch v0.0.2 git@github.com:regismartins/cc-eks-egress-gw.git && \
+   git clone git@github.com:tigera-solutions/cc-eks-egress-gw.git && \
    cd cc-eks-egress-gw
    ```
 

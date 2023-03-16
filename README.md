@@ -1,10 +1,10 @@
-# Calico Cloud Egress Gateway on AWS EKS Cluster 
+# Calico Cloud Egress Gateway on AWS EKS Cluster Workshop
 
 ## Welcome
 
 Controlling the source IP seen when traffic leaves the cluster allows groups of pods to be identified by external firewalls, appliances and services (even as the groups are scaled up/down or pods restarted). Calico Cloud controls the source IP by directing traffic through one or more **egress gateway** pods, which change the source IP of the traffic to their own IP. The egress gateways used can be chosen at the pod or namespace scope allowing for flexibility in how the cluster is seen from outside.
 
-This repo intends to guide you step-by-step on creating an AWS EKS cluster, installing Calico as CNI, registering the cluster on Calico Cloud and creating an egress gateway for your applications to leave the Kubernetes cluster with a different IP address than the nodes or even with a fixed public IP address towards the Internet.
+This workshop intends to guide you step-by-step on creating an AWS EKS cluster, installing Calico as CNI, registering the cluster on Calico Cloud and creating an egress gateway for your applications to leave the Kubernetes cluster with a different IP address than the nodes or even with a fixed public IP address towards the Internet.
 
 ### Time Requirements
 

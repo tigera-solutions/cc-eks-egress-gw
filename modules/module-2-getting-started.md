@@ -8,11 +8,11 @@ In this section we will put in place the AWS infrastructure to deploy the AWS EK
 1. Define the initial environment variables for your EKS cluster:
 
    ```bash
-   export CLUSTERNAME=rmart-egw
-   export REGION=sa-east-1
-   export K8SVERSION=1.23
+   export CLUSTERNAME=calico-egw
+   export REGION=ca-central-1
+   export K8SVERSION=1.25
    export INSTANCETYPE=t3.large
-   export KEYPAIRNAME=rmart-egw-key
+   export KEYPAIRNAME=calico-egw-key
    ```
 
    Persist the enviroment variables for later sessions in case of disconnetion.

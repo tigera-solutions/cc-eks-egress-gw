@@ -47,7 +47,7 @@ In this section we will put in place the AWS infrastructure to deploy the AWS EK
    The expect output is:
 
    <pre>
-   -r--------  1 regis  staff  1675 24 Nov 09:01 /Users/regis/.ssh/rmart-egw-key.pem
+   -r--------  1 regis  staff  1679 17 Apr 11:07 /Users/regis/.ssh/calico-egw-key.pem
    </pre>
 
 ---

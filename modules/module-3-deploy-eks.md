@@ -26,7 +26,7 @@
    - Install Calico CNI
  
      ```bash
-     kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
      ```
 
    - Create the installation configuration.
